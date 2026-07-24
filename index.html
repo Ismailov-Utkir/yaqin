@@ -313,7 +313,6 @@
 </nav>
 
 <div class="ad-bar" id="adBar"></div>
-<div class="visitors" id="visitors" title="Umumiy foydalanuvchilar"><span>👥</span> <b id="vcount">—</b></div>
 
 <section class="market hidden" id="market">
   <div class="market-head">
@@ -1530,19 +1529,21 @@ function renderAds(){
 }
 function loadAds(){ fetch('ads.json?_='+Date.now()).then(r=>r.ok?r.json():[]).then(d=>{ADS=Array.isArray(d)?d:[];renderAds();}).catch(()=>{}); }
 
-/* ---- Foydalanuvchilar hisoblagichi ---- */
-function initVisitors(){
-  const el=document.getElementById('vcount');
-  const NS='yaqin_ismailov', KEY='foydalanuvchilar';
-  const counted=sessionStorage.getItem('yaqin_counted');
-  const url='https://api.counterapi.dev/v1/'+NS+'/'+KEY+(counted?'/':'/up');
-  fetch(url).then(r=>r.json()).then(d=>{ if(d&&typeof d.count!=='undefined'){ el.textContent=Number(d.count).toLocaleString('ru-RU'); sessionStorage.setItem('yaqin_counted','1'); } }).catch(()=>{ el.textContent='—'; });
+/* ---- Foydalanuvchilarni jimgina sanash (oylik) — faqat admin panelda ko'rinadi ---- */
+function trackVisit(){
+  try{
+    if(sessionStorage.getItem('yaqin_counted'))return;
+    const d=new Date();
+    const key='oy'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0');
+    fetch('https://api.counterapi.dev/v1/yaqin_ismailov/'+key+'/up')
+      .then(()=>sessionStorage.setItem('yaqin_counted','1')).catch(()=>{});
+  }catch(e){}
 }
 
 Object.assign(T.uz,{}); applyI18n();
 loadCars();
 loadAds();
-initVisitors();
+trackVisit();
 </script>
 </body>
 </html>
