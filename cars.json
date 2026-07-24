@@ -1,1 +1,16 @@
-[]
+[
+ {
+  "price": "152000000",
+  "phone": "+998 90 123 45 67",
+  "name": "Chevrolet Cobalt",
+  "desc": "Ideal holatda, bitta egasi. Probeg 45 000 km. To'liq xizmat kitobi bor.",
+  "year": "2021"
+ },
+ {
+  "price": "285000000",
+  "phone": "+998 91 234 56 78",
+  "name": "Chevrolet Malibu 2",
+  "desc": "Premium komplektatsiya, teri salon, panorama.",
+  "year": "2020"
+ }
+]
