@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yaqin — eng yaqin avto yordam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2F6FC;--surface:#FFFFFF;--blue:#2563EB;--blue-deep:#1D4ED8;--navy:#0F2E6B;--navy-2:#193F86;
+    --blue-soft:#E7F0FE;--sky:#60A5FA;--go:#16A34A;--go-soft:#DCFCE7;--red:#DC2626;--red-soft:#FEE2E2;
+    --ink:#10213F;--ink-soft:#44536E;--slate:#6B7789;--line:#E1E9F4;--line-strong:#C9D6E8;
+    --r:16px;--r-sm:11px;--shadow-sm:0 1px 2px rgba(16,33,63,.05),0 1px 1px rgba(16,33,63,.04);--shadow-md:0 8px 26px rgba(16,33,63,.10);
+    --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:var(--font);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.45;font-variant-numeric:tabular-nums;overflow-x:hidden}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  select{font-family:inherit}
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-radius:6px}
+
+  .top{position:sticky;top:0;z-index:40;background:var(--surface);padding:12px clamp(14px,4vw,40px);display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(16,33,63,.02)}
+  .brand{display:flex;align-items:center;gap:11px;flex-shrink:0}
+  .mark{width:36px;height:36px;border-radius:10px;background:var(--blue);display:grid;place-items:center;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+  .brand-name{font-weight:700;font-size:20px;letter-spacing:-.02em;line-height:1;color:var(--navy)}
+  .brand-dot{color:var(--blue)}
+  .brand-tag{font-size:11px;color:var(--slate);margin-top:3px}
+  .top-spacer{flex:1}
+  .lang-seg{display:inline-flex;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-shrink:0}
+  .lang-seg button{padding:6px 11px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--slate);transition:.14s}
+  .lang-seg button.on{background:var(--blue);color:#fff}
+  .lang-seg button:not(.on):hover{color:var(--ink)}
+  .loc-btn{display:inline-flex;align-items:center;gap:7px;background:var(--blue-soft);border:1px solid #CFE0FB;padding:8px 13px;border-radius:10px;font-size:13px;font-weight:500;color:var(--navy);transition:.15s}
+  .loc-btn:hover{border-color:var(--blue);background:#DCE9FE}
+  .loc-btn .pulse{width:8px;height:8px;border-radius:50%;background:var(--blue);animation:ping 2s infinite}
+  .loc-ic{display:none}
+  .add-btn{display:inline-flex;align-items:center;gap:7px;background:var(--blue);color:#fff;padding:9px 15px;border-radius:10px;font-weight:600;font-size:13px;transition:transform .12s,background .15s}
+  .add-btn:hover{background:var(--blue-deep)}
+  .add-btn:active{transform:translateY(1px)}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(37,99,235,.5)}70%{box-shadow:0 0 0 7px rgba(37,99,235,0)}100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}}
+
+  .controls{padding:20px clamp(14px,4vw,40px) 4px}
+  .ctl-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin:0 2px 9px}
+  .services{display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+  .services::-webkit-scrollbar{height:5px}
+  .services::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:9px}
+  .svc{flex-shrink:0;display:flex;align-items:center;gap:9px;background:var(--surface);border:1.5px solid var(--line);padding:9px 15px 9px 11px;border-radius:12px;font-size:14px;font-weight:500;color:var(--ink-soft);transition:.14s;white-space:nowrap}
+  .svc:hover{border-color:var(--line-strong)}
+  .svc .ic{width:21px;height:21px;color:var(--slate);flex-shrink:0;transition:color .14s}
+  .svc.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:var(--shadow-md)}
+  .svc.active .ic{color:#fff}
+
+  .filters{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-top:18px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.hidden{display:none}
+  .field label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);margin-left:2px}
+  .sel-wrap{position:relative}
+  .sel-wrap svg{position:absolute;right:11px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--slate)}
+  select.sel{appearance:none;-webkit-appearance:none;background:var(--surface);border:1.5px solid var(--line);padding:10px 34px 10px 13px;border-radius:11px;font-size:14px;font-weight:500;color:var(--ink);min-width:200px;transition:border-color .14s}
+  select.sel:hover{border-color:var(--line-strong)}
+  select.sel:focus{outline:none;border-color:var(--blue)}
+  .seg{display:inline-flex;background:var(--surface);border:1.5px solid var(--line);border-radius:11px;padding:3px;gap:2px}
+  .seg button{padding:7px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--slate);transition:.14s;white-space:nowrap}
+  .seg button.on{background:var(--blue);color:#fff}
+  .seg button:not(.on):hover{color:var(--ink)}
+
+  .page{max-width:1560px;margin:0 auto;padding:22px clamp(14px,4vw,40px) 60px;display:grid;grid-template-columns:272px 1fr 272px;gap:24px;align-items:start}
+  .side{position:sticky;top:82px;display:flex;flex-direction:column;gap:16px}
+  .panel{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:16px 17px;box-shadow:var(--shadow-sm)}
+  .panel-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin-bottom:13px}
+  .side .field{margin-bottom:14px}
+  .side .field:last-child{margin-bottom:0}
+  .side select.sel{width:100%;min-width:0}
+  .side .seg{width:100%}.side .seg button{flex:1;text-align:center}
+  .how{display:flex;flex-direction:column;gap:12px}
+  .how-step{display:flex;align-items:center;gap:11px;font-size:13.5px;color:var(--ink-soft);line-height:1.35}
+  .how-n{width:24px;height:24px;flex-shrink:0;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:700;font-size:12.5px;display:grid;place-items:center}
+  .stats{display:flex;justify-content:space-between;gap:8px;text-align:center}
+  .stat-v{font-size:21px;font-weight:700;color:var(--navy);line-height:1}
+  .stat-k{font-size:11px;color:var(--slate);margin-top:5px}
+  .cta{background:var(--navy);border-color:var(--navy)}
+  .cta-title{color:#fff;font-weight:700;font-size:15px}
+  .cta-text{color:#B9C7E6;font-size:12.5px;line-height:1.45;margin:6px 0 12px}
+  .cta-btn{width:100%;background:var(--blue);color:#fff;font-weight:600;font-size:13.5px;padding:10px;border-radius:10px;transition:background .14s}
+  .cta-btn:hover{background:#3B82F6}
+
+  .ai-fab{position:fixed;right:24px;bottom:24px;z-index:55;display:inline-flex;align-items:center;gap:9px;background:var(--blue);color:#fff;font-weight:600;font-size:14px;padding:13px 18px;border-radius:30px;box-shadow:0 10px 26px rgba(37,99,235,.42);transition:transform .14s,background .14s}
+  .ai-fab:hover{background:var(--blue-deep);transform:translateY(-2px)}
+  .ai-fab svg{width:20px;height:20px}
+  .ai-fab.hide{display:none}
+  .ai-panel{position:fixed;right:24px;bottom:24px;z-index:56;width:384px;max-width:calc(100vw - 28px);height:560px;max-height:calc(100vh - 40px);background:var(--surface);border:1.5px solid var(--line);border-radius:18px;box-shadow:0 22px 60px rgba(16,33,63,.3);display:none;flex-direction:column;overflow:hidden}
+  .ai-panel.show{display:flex;animation:pop .22s ease}
+  .ai-head{background:var(--navy);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+  .ai-htitle{display:flex;align-items:center;gap:10px}
+  .ai-badge{width:34px;height:34px;border-radius:10px;background:var(--blue);display:grid;place-items:center;flex-shrink:0}
+  .ai-badge svg{width:19px;height:19px}
+  .ai-htitle .tt{font-weight:700;font-size:15px;line-height:1.1}
+  .ai-htitle .ss{font-size:11px;color:#9CB4E0;margin-top:2px}
+  .ai-close{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.12);display:grid;place-items:center;color:#fff;transition:.14s;flex-shrink:0}
+  .ai-close:hover{background:rgba(255,255,255,.22)}
+  .ai-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:11px;background:var(--paper);-webkit-overflow-scrolling:touch}
+  .msg{max-width:86%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.5;word-wrap:break-word}
+  .msg.bot{background:var(--surface);border:1px solid var(--line);color:var(--ink);align-self:flex-start;border-bottom-left-radius:5px}
+  .msg.user{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+  .msg b{font-weight:600}
+  .rec{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+  .rec-item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+  .ri-name{font-weight:600;font-size:12.5px;color:var(--navy)}
+  .ri-dist{font-size:11px;color:var(--slate);margin-top:1px}
+  .rec-call{background:var(--blue);color:#fff;font-weight:600;font-size:11.5px;padding:7px 11px;border-radius:8px;white-space:nowrap;flex-shrink:0}
+  .ai-chips{display:flex;gap:7px;flex-wrap:wrap;padding:10px 12px 0;background:var(--surface)}
+  .ai-chip{font-size:12px;font-weight:500;color:var(--blue);background:var(--blue-soft);border:1px solid #CFE0FB;padding:6px 11px;border-radius:20px;cursor:pointer;transition:.12s}
+  .ai-chip:hover{background:#DCE9FE}
+  .ai-input{display:flex;gap:8px;padding:12px;background:var(--surface)}
+  .ai-input input{flex:1;padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit;background:var(--surface)}
+  .ai-input input:focus{outline:none;border-color:var(--blue)}
+  .ai-send{width:44px;flex-shrink:0;background:var(--blue);color:#fff;border-radius:10px;display:grid;place-items:center;transition:background .14s}
+  .ai-send:hover{background:var(--blue-deep)}
+  @media(max-width:640px){
+    .ai-fab{right:16px;bottom:16px;padding:11px 15px;font-size:13px}
+    .ai-panel{right:10px;left:10px;bottom:10px;width:auto;max-width:none;height:calc(100dvh - 20px);max-height:calc(100dvh - 20px)}
+  }
+  .results-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+  .results-head h1{font-weight:600;font-size:18px;letter-spacing:-.01em;margin:0;color:var(--navy)}
+  .results-head .sub{font-size:13px;color:var(--slate)}
+  .results-head .count{color:var(--blue);font-weight:600}
+  .list{display:flex;flex-direction:column;gap:12px}
+
+  .card{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:16px 17px;display:grid;grid-template-columns:auto 1fr auto;gap:15px;align-items:center;box-shadow:var(--shadow-sm);transition:border-color .16s,box-shadow .16s;position:relative}
+  .card:hover{border-color:var(--line-strong);box-shadow:var(--shadow-md)}
+  .card.nearest{border-color:var(--blue);box-shadow:0 0 0 1.5px var(--blue),var(--shadow-md)}
+  .card.flash{animation:flash .9s ease}
+  @keyframes flash{0%,100%{box-shadow:var(--shadow-sm)}30%{box-shadow:0 0 0 3px var(--blue)}}
+
+  .dist-col{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:74px;padding-right:14px;border-right:1.5px solid var(--line)}
+  .dist-km{font-weight:600;font-size:23px;letter-spacing:-.02em;line-height:1;color:var(--navy)}
+  .dist-unit{font-size:11px;color:var(--slate);margin-top:4px;font-weight:500}
+  .card.nearest .dist-km{color:var(--blue)}
+
+  .mid{min-width:0}
+  .name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .p-name{font-weight:600;font-size:15.5px;letter-spacing:-.01em;color:var(--navy)}
+  .badge{font-size:10.5px;font-weight:600;padding:3px 7px;border-radius:6px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+  .badge.near{background:var(--blue);color:#fff}
+  .badge.verif{background:var(--blue-soft);color:var(--blue);display:inline-flex;align-items:center;gap:3px}
+  .badge.h24{background:var(--navy);color:#fff}
+  .svc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+  .stag{font-size:12px;font-weight:500;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);padding:2px 8px;border-radius:7px;display:inline-flex;align-items:center;gap:5px}
+  .stag .ic{width:13px;height:13px;color:var(--slate)}
+  .meta-row{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--slate);flex-wrap:wrap}
+  .meta-row b{font-weight:600;color:var(--ink)}
+  .rating{display:inline-flex;align-items:center;gap:4px;color:var(--ink)}
+  .rating svg{color:#F59E0B}
+  .open-now{display:inline-flex;align-items:center;gap:5px;color:var(--go);font-weight:500}
+  .open-now.closed{color:var(--red)}
+  .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+  .actions{display:flex;flex-direction:column;gap:8px;align-items:stretch;min-width:132px}
+  .call{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--blue);color:#fff;font-weight:600;font-size:14px;padding:11px 14px;border-radius:11px;transition:background .14s,transform .1s}
+  .call:hover{background:var(--blue-deep)}
+  .call:active{transform:translateY(1px)}
+  .details{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1.5px solid var(--line-strong);color:var(--ink-soft);font-weight:500;font-size:13px;padding:9px 14px;border-radius:11px;transition:.14s}
+  .details:hover{border-color:var(--navy);color:var(--navy)}
+  .price-hint{font-size:12px;color:var(--slate);text-align:center;font-weight:500}
+
+  .empty{background:var(--surface);border:1.5px dashed var(--line-strong);border-radius:var(--r);padding:44px 24px;text-align:center;color:var(--slate)}
+  .empty h3{font-weight:600;color:var(--navy);margin:0 0 6px;font-size:16px}
+  .empty p{margin:0 0 16px;font-size:14px}
+  .empty button{background:var(--blue);color:#fff;padding:9px 16px;border-radius:10px;font-weight:500;font-size:13px}
+
+  .overlay{position:fixed;inset:0;background:rgba(15,46,107,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:60;display:none;align-items:center;justify-content:center;padding:20px}
+  .overlay.show{display:flex}
+  .modal{background:var(--surface);border-radius:20px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(16,33,63,.3);animation:pop .22s ease}
+  @keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .modal-head{padding:20px 22px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .modal-head h2{font-weight:700;font-size:19px;letter-spacing:-.01em;margin:0;color:var(--navy)}
+  .close-x{width:34px;height:34px;border-radius:9px;background:var(--paper);display:grid;place-items:center;color:var(--slate);flex-shrink:0;transition:.14s}
+  .close-x:hover{background:var(--line);color:var(--ink)}
+  .modal-body{padding:16px 22px 22px}
+  .d-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  .d-cell{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+  .d-cell .k{font-size:11px;color:var(--slate);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+  .d-cell .v{font-weight:600;font-size:16px;color:var(--navy)}
+  .d-cell .v.go{color:var(--go)}
+  .modal .call{width:100%;padding:14px;font-size:15px;margin-top:6px}
+  .form-field{margin-bottom:14px}
+  .form-field > span{display:block;font-size:12px;font-weight:500;color:var(--ink-soft);margin-bottom:6px}
+  .form-field input, .form-field select, .form-field textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit;background:var(--surface)}
+  .form-field textarea{resize:vertical;min-height:78px;line-height:1.5}
+  .form-field input:focus, .form-field textarea:focus{outline:none;border-color:var(--blue)}
+  .d-desc{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 14px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .chk{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;cursor:pointer;transition:.12s}
+  .chk:hover{border-color:var(--line-strong)}
+  .chk input{width:auto;accent-color:var(--blue)}
+  .submit{width:100%;background:var(--blue);color:#fff;font-weight:600;font-size:15px;padding:13px;border-radius:11px;margin-top:6px}
+  .loc-set-btn{display:inline-flex;align-items:center;gap:8px;width:100%;justify-content:center;background:var(--blue-soft);border:1.5px solid #CFE0FB;color:var(--navy);font-weight:500;font-size:13.5px;padding:11px;border-radius:10px;transition:.14s}
+  .loc-set-btn:hover{border-color:var(--blue);background:#DCE9FE}
+  .loc-set-btn.done{background:var(--go-soft);border-color:#BBF7D0;color:var(--go)}
+  .loc-result{display:none;align-items:center;gap:7px;margin-top:8px;font-size:12px;color:var(--go);font-weight:500}
+  .loc-result.show{display:flex}
+  .loc-result svg{color:var(--go)}
+  .d-loc-label{font-size:12px;font-weight:500;color:var(--ink-soft);margin:2px 0 6px}
+  .map-link{display:block;position:relative;height:172px;border-radius:12px;overflow:hidden;border:1.5px solid var(--line);margin-bottom:10px;cursor:pointer}
+  .map-frame{width:100%;height:100%;border:0;display:block;pointer-events:none}
+  .map-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:var(--slate);background:var(--paper);font-size:12px}
+  .map-fallback svg{width:26px;height:26px;color:var(--blue)}
+  .map-pill{position:absolute;right:10px;bottom:10px;display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-size:12.5px;font-weight:600;padding:8px 12px;border-radius:9px;box-shadow:0 4px 12px rgba(16,33,63,.28);transition:background .14s;z-index:2}
+  .map-pill svg{width:14px;height:14px}
+  .map-link:hover .map-pill{background:var(--blue-deep)}
+  .nav-row{display:flex;gap:9px;margin-bottom:14px}
+  .nav-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:10px;font-weight:600;font-size:13.5px;transition:.14s}
+  .nav-btn.primary{background:var(--blue);color:#fff}
+  .nav-btn.primary:hover{background:var(--blue-deep)}
+  .nav-btn.ghost{background:transparent;border:1.5px solid var(--line-strong);color:var(--ink-soft)}
+  .nav-btn.ghost:hover{border-color:var(--navy);color:var(--navy)}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:var(--shadow-md);z-index:70;opacity:0;pointer-events:none;transition:.28s;display:flex;align-items:center;gap:10px}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast svg{color:var(--sky);flex-shrink:0}
+
+  @media(max-width:1160px){.page{grid-template-columns:272px 1fr}.side-right{display:none}}
+  @media(max-width:900px){.page{grid-template-columns:1fr;gap:16px}.side{position:static}.side-right{display:none}}
+  @media(max-width:640px){
+    .top{gap:8px;padding:11px 14px}
+    .brand-tag{display:none}.add-btn span{display:none}.add-btn{padding:9px 12px}
+    .loc-btn{padding:8px 10px}.loc-btn .pulse,.loc-txt{display:none}.loc-ic{display:block}
+    .controls{padding:16px 14px 4px}
+    .filters{gap:10px}
+    .field{flex:1 1 100%}
+    select.sel{min-width:0;width:100%}
+    .seg{width:100%}.seg button{flex:1;text-align:center}
+    .page{padding:16px 14px 48px;gap:16px}
+    .card{grid-template-columns:1fr;gap:12px}
+    .dist-col{flex-direction:row;gap:8px;border-right:none;border-bottom:1.5px solid var(--line);padding:0 0 10px;min-width:0;justify-content:flex-start}
+    .dist-km{font-size:20px}
+    .actions{min-width:0;flex-direction:row}.call,.details{flex:1}
+    .price-hint{position:absolute;top:16px;right:17px}
+    .modal{border-radius:16px}
+    .modal-head{padding:18px 18px 0}.modal-body{padding:14px 18px 20px}
+  }
+  @media(max-width:380px){
+    .top{gap:6px}
+    .brand-name{font-size:18px}
+    .lang-seg button{padding:6px 9px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style>
+/* ==== Avto bozor (sotuvdagi mashinalar) ==== */
+.mode-bar{display:flex;gap:8px;justify-content:center;padding:14px 16px 0;max-width:1200px;margin:0 auto}
+.mode-bar .mode{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:999px;border:1px solid var(--border,#e3e7ee);background:var(--surface,#fff);color:var(--text,#1a2230);font-weight:700;font-size:14px;cursor:pointer;transition:.18s;font-family:inherit}
+.mode-bar .mode.on{background:#2563EB;border-color:#2563EB;color:#fff;box-shadow:0 6px 18px rgba(37,99,235,.28)}
+.market{max-width:1200px;margin:0 auto;padding:18px 16px 60px}
+.market.hidden{display:none}
+.market-head{margin-bottom:16px}
+.market-head h1{font-size:22px;font-weight:800}
+.market-head .sub{color:var(--muted,#6b7480);font-size:13px;margin-top:2px}
+.car-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.car{background:var(--surface,#fff);border:1px solid var(--border,#e6e9f0);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:.18s}
+.car:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(20,30,50,.12)}
+.car .ph{aspect-ratio:4/3;background:#eef1f6 center/cover no-repeat;display:grid;place-items:center;color:#9aa4b2;font-size:34px}
+.car .body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.car .ttl{font-weight:800;font-size:16px;line-height:1.2}
+.car .price{color:#2563EB;font-weight:800;font-size:17px}
+.car .yr{font-size:12px;color:var(--muted,#6b7480)}
+.car .desc{font-size:13px;color:var(--muted,#59616e);line-height:1.35;flex:1;white-space:pre-line}
+.car .call{margin-top:6px;text-align:center;padding:10px;border-radius:10px;background:#2563EB;color:#fff;font-weight:700;text-decoration:none;font-size:14px}
+.market-empty{text-align:center;padding:60px 20px;color:var(--muted,#8a93a0);font-size:15px}
+.market-empty.hidden{display:none}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div class="mark">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.87 5.4 11.1 6.44 12.26.3.33.82.33 1.12 0C13.6 20.1 19 13.87 19 9c0-3.87-3.13-7-7-7Z" fill="#fff"/><path d="M9.5 11.5l1.6 1.6 3.4-3.6" stroke="#2563EB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div>
+      <div class="brand-name">yaqin<span class="brand-dot">.</span></div>
+      <div class="brand-tag" data-i18n="brandTag">Eng yaqin avto yordam</div>
+    </div>
+  </div>
+  <div class="top-spacer"></div>
+  <div class="lang-seg" id="langSeg">
+    <button data-lang="uz" class="on">UZ</button>
+    <button data-lang="ru">RU</button>
+  </div>
+  <button class="loc-btn" id="locBtn"><span class="pulse"></span><svg class="loc-ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7Z"/><circle cx="12" cy="9" r="2.4"/></svg><span class="loc-txt" id="locLabel">Joylashuv aniqlanmoqda…</span></button>
+  <button class="add-btn" id="addBtn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    <span data-i18n="addBtn">Xizmatingizni qo'shing</span>
+  </button>
+</header>
+
+<nav class="mode-bar" id="modeBar">
+  <button class="mode on" data-mode="yordam">🔧 <span data-i18n="modeYordam">Avto yordam</span></button>
+  <button class="mode" data-mode="bozor">🚗 <span data-i18n="modeBozor">Avto bozor</span></button>
+</nav>
+
+<section class="market hidden" id="market">
+  <div class="market-head">
+    <h1 data-i18n="mktTitle">Sotuvdagi avtomobillar</h1>
+    <div class="sub"><span id="carCount">0</span> <span data-i18n="mktCount">ta e'lon</span></div>
+  </div>
+  <div class="car-grid" id="carGrid"></div>
+  <div class="market-empty hidden" id="carEmpty" data-i18n="mktEmpty">Hozircha e'lon yo'q</div>
+</section>
+
+<section class="controls">
+  <div class="ctl-label" data-i18n="svcTypeLabel">Xizmat turi</div>
+  <div class="services" id="services"><button class="svc active" data-svc="hammasi"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span>Barchasi</button><button class="svc " data-svc="evakuator"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V9h9l3 3h4a2 2 0 0 1 2 2v3"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle><path d="M12 9V6h5l3 4"></path></svg></span>Evakuator</button><button class="svc " data-svc="vulkanizatsiya"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</button><button class="svc " data-svc="elektrik"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"></path></svg></span>Avto elektrik</button><button class="svc " data-svc="yoqilgi"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v15M3 21h13"></path><path d="M4 12h10M14 8l3 3v6.5a2 2 0 0 0 3-1.5V10l-3-3"></path></svg></span>Yoqilg'i yetkazish</button><button class="svc " data-svc="moy"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"></path></svg></span>Moy almashtirish</button><button class="svc " data-svc="xodovoy"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 20h12M9 4v2l6 2-6 2 6 2-6 2 6 2v2"></path></svg></span>Xodovoy ta'miri</button><button class="svc " data-svc="yuk"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V7a1 1 0 0 1 1-1h9v9"></path><path d="M13 10h4l3 3v2h-2"></path><path d="M11 15H9"></path><circle cx="7" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg></span>Yuk mashinalari servisi</button><button class="svc " data-svc="avtomoyka"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18h14"></path><path d="M6.5 18l1.5-4.5h8L17.5 18"></path><circle cx="8.7" cy="18" r="1.2"></circle><circle cx="15.3" cy="18" r="1.2"></circle><path d="M8 3v2.5M12 2.5v2.5M16 3v2.5"></path></svg></span>Ko'chma avtomoyka</button><button class="svc " data-svc="zapchast"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="3" width="7" height="6" rx="1.5"></rect><path d="M8.5 5.4h7M12 9v3"></path><circle cx="12" cy="16" r="3.2"></circle><circle cx="12" cy="16" r="1"></circle></svg></span>Ehtiyot qismlar</button></div>
+</section>
+
+<div class="page">
+  <aside class="side side-left">
+    <div class="panel">
+      <div class="panel-title" data-i18n="panelFilters">Filtrlar</div>
+      <div class="field">
+        <label data-i18n="regionLabel">Hudud</label>
+        <div class="sel-wrap">
+          <select class="sel" id="regionSel"><option value="all">Barcha hududlar</option><option value="toshkent_shahri">Toshkent shahri</option><option value="toshkent_vil">Toshkent viloyati</option><option value="andijon">Andijon viloyati</option><option value="buxoro">Buxoro viloyati</option><option value="fargona">Farg'ona viloyati</option><option value="jizzax">Jizzax viloyati</option><option value="namangan">Namangan viloyati</option><option value="navoiy">Navoiy viloyati</option><option value="qashqadaryo">Qashqadaryo viloyati</option><option value="qoraqalpogiston">Qoraqalpog'iston Respublikasi</option><option value="samarqand">Samarqand viloyati</option><option value="sirdaryo">Sirdaryo viloyati</option><option value="surxondaryo">Surxondaryo viloyati</option><option value="xorazm">Xorazm viloyati</option></select>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="field hidden" id="subField">
+        <label data-i18n="subLabel">Tuman / Shahar</label>
+        <div class="sel-wrap">
+          <select class="sel" id="subSel"></select>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="field">
+        <label data-i18n="sortLabel">Tartiblash</label>
+        <div class="seg" id="sortSeg">
+          <button data-sort="masofa" class="on" data-i18n="sortDist">Masofa</button>
+          <button data-sort="reyting" data-i18n="sortRating">Reyting</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="results">
+    <div class="results-head">
+      <h1 data-i18n="resultsTitle">Xizmat ko'rsatish markazlari</h1>
+      <div class="sub"><span class="count">23</span> ta topildi · masofa bo'yicha</div>
+    </div>
+    <div class="list" id="list"><div class="card nearest" data-id="1" id="card-1">
+      <div class="dist-col"><div class="dist-km">304</div><div class="dist-unit">m uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Tez Yordam Evakuator</span>
+          <span class="badge near">Eng yaqin</span>
+          <span class="badge h24">24 soat</span>
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V9h9l3 3h4a2 2 0 0 1 2 2v3"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle><path d="M12 9V6h5l3 4"></path></svg></span>Evakuator</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.9</b> <span style="color:var(--slate)">(213)</span></span>
+          <span>Yakkasaroy</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234501"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="1">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="2" id="card-2">
+      <div class="dist-col"><div class="dist-km">1.0</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Vulkan Servis 24</span>
+          
+          <span class="badge h24">24 soat</span>
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.7</b> <span style="color:var(--slate)">(156)</span></span>
+          <span>Yakkasaroy</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234502"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="2">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="9" id="card-9">
+      <div class="dist-col"><div class="dist-km">2.5</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Premium Auto Elektrik</span>
+          
+          
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"></path></svg></span>Avto elektrik</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.8</b> <span style="color:var(--slate)">(66)</span></span>
+          <span>Mirobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234509"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="9">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="11" id="card-11">
+      <div class="dist-col"><div class="dist-km">2.6</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Yoqilg'i Yetkazish 24</span>
+          
+          <span class="badge h24">24 soat</span>
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v15M3 21h13"></path><path d="M4 12h10M14 8l3 3v6.5a2 2 0 0 0 3-1.5V10l-3-3"></path></svg></span>Yoqilg'i yetkazish</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.6</b> <span style="color:var(--slate)">(28)</span></span>
+          <span>Mirobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234511"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="11">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="19" id="card-19">
+      <div class="dist-col"><div class="dist-km">2.6</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Ko'chma Avtomoyka</span>
+          
+          
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18h14"></path><path d="M6.5 18l1.5-4.5h8L17.5 18"></path><circle cx="8.7" cy="18" r="1.2"></circle><circle cx="15.3" cy="18" r="1.2"></circle><path d="M8 3v2.5M12 2.5v2.5M16 3v2.5"></path></svg></span>Ko'chma avtomoyka</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.7</b> <span style="color:var(--slate)">(128)</span></span>
+          <span>Mirobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234519"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="19">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="22" id="card-22">
+      <div class="dist-col"><div class="dist-km">4.7</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Zapchast Bozori</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="3" width="7" height="6" rx="1.5"></rect><path d="M8.5 5.4h7M12 9v3"></path><circle cx="12" cy="16" r="3.2"></circle><circle cx="12" cy="16" r="1"></circle></svg></span>Ehtiyot qismlar</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.3</b> <span style="color:var(--slate)">(87)</span></span>
+          <span>Chilonzor</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234522"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="22">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="10" id="card-10">
+      <div class="dist-col"><div class="dist-km">4.8</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Vulkanizatsiya Express</span>
+          
+          <span class="badge h24">24 soat</span>
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</span><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v15M3 21h13"></path><path d="M4 12h10M14 8l3 3v6.5a2 2 0 0 0 3-1.5V10l-3-3"></path></svg></span>Yoqilg'i yetkazish</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.3</b> <span style="color:var(--slate)">(39)</span></span>
+          <span>Shayxontohur</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234510"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="10">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="3" id="card-3">
+      <div class="dist-col"><div class="dist-km">4.9</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Avto Elektrik Sardor</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"></path></svg></span>Avto elektrik</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.8</b> <span style="color:var(--slate)">(98)</span></span>
+          <span>Chilonzor</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234503"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="3">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="15" id="card-15">
+      <div class="dist-col"><div class="dist-km">5.0</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Xodovoy Servis Pro</span>
+          
+          
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 20h12M9 4v2l6 2-6 2 6 2-6 2 6 2v2"></path></svg></span>Xodovoy ta'miri</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.6</b> <span style="color:var(--slate)">(92)</span></span>
+          <span>Chilonzor</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234515"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="15">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="16" id="card-16">
+      <div class="dist-col"><div class="dist-km">5.3</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Osma va Xodovoy Markazi</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 20h12M9 4v2l6 2-6 2 6 2-6 2 6 2v2"></path></svg></span>Xodovoy ta'miri</span><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.4</b> <span style="color:var(--slate)">(55)</span></span>
+          <span>Yashnobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234516"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="16">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="12" id="card-12">
+      <div class="dist-col"><div class="dist-km">5.5</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Moy Servis Yashnobod</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"></path></svg></span>Moy almashtirish</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.5</b> <span style="color:var(--slate)">(84)</span></span>
+          <span>Yashnobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234512"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="12">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="4" id="card-4">
+      <div class="dist-col"><div class="dist-km">5.6</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Yo'lda Servis</span>
+          
+          <span class="badge h24">24 soat</span>
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V9h9l3 3h4a2 2 0 0 1 2 2v3"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle><path d="M12 9V6h5l3 4"></path></svg></span>Evakuator</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.6</b> <span style="color:var(--slate)">(74)</span></span>
+          <span>Chilonzor</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234504"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="4">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="14" id="card-14">
+      <div class="dist-col"><div class="dist-km">6.9</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Auto Help Uchtepa</span>
+          
+          
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.7</b> <span style="color:var(--slate)">(71)</span></span>
+          <span>Uchtepa</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234514"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="14">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="21" id="card-21">
+      <div class="dist-col"><div class="dist-km">7.5</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Avto Ehtiyot Qismlar</span>
+          
+          
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="3" width="7" height="6" rx="1.5"></rect><path d="M8.5 5.4h7M12 9v3"></path><circle cx="12" cy="16" r="3.2"></circle><circle cx="12" cy="16" r="1"></circle></svg></span>Ehtiyot qismlar</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.5</b> <span style="color:var(--slate)">(110)</span></span>
+          <span>Sergeli</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234521"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="21">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="17" id="card-17">
+      <div class="dist-col"><div class="dist-km">7.5</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Yuk Servis 24</span>
+          
+          <span class="badge h24">24 soat</span>
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V7a1 1 0 0 1 1-1h9v9"></path><path d="M13 10h4l3 3v2h-2"></path><path d="M11 15H9"></path><circle cx="7" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg></span>Yuk mashinalari servisi</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.5</b> <span style="color:var(--slate)">(63)</span></span>
+          <span>Sergeli</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234517"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="17">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="13" id="card-13">
+      <div class="dist-col"><div class="dist-km">7.8</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Tungi Evakuator</span>
+          
+          <span class="badge h24">24 soat</span>
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V9h9l3 3h4a2 2 0 0 1 2 2v3"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle><path d="M12 9V6h5l3 4"></path></svg></span>Evakuator</span><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.2</b> <span style="color:var(--slate)">(47)</span></span>
+          <span>Sergeli</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234513"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="13">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="5" id="card-5">
+      <div class="dist-col"><div class="dist-km">7.9</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Shina Master</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.5</b> <span style="color:var(--slate)">(61)</span></span>
+          <span>Mirzo Ulug'bek</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234505"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="5">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="8" id="card-8">
+      <div class="dist-col"><div class="dist-km">8.5</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Evakuator Nur</span>
+          
+          <span class="badge h24">24 soat</span>
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V9h9l3 3h4a2 2 0 0 1 2 2v3"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle><path d="M12 9V6h5l3 4"></path></svg></span>Evakuator</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.7</b> <span style="color:var(--slate)">(143)</span></span>
+          <span>Olmazor</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234508"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="8">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="23" id="card-23">
+      <div class="dist-col"><div class="dist-km">8.5</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Original Zapchast</span>
+          
+          
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="3" width="7" height="6" rx="1.5"></rect><path d="M8.5 5.4h7M12 9v3"></path><circle cx="12" cy="16" r="3.2"></circle><circle cx="12" cy="16" r="1"></circle></svg></span>Ehtiyot qismlar</span><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"></path></svg></span>Moy almashtirish</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.7</b> <span style="color:var(--slate)">(64)</span></span>
+          <span>Yunusobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234523"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="23">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="6" id="card-6">
+      <div class="dist-col"><div class="dist-km">8.8</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Avto Elektrik Doston</span>
+          
+          
+          <span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"></path></svg>Tasdiqlangan</span>
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"></path></svg></span>Avto elektrik</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.9</b> <span style="color:var(--slate)">(187)</span></span>
+          <span>Yunusobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234506"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="6">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="20" id="card-20">
+      <div class="dist-col"><div class="dist-km">9.1</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Mobil Avto Yuvish</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18h14"></path><path d="M6.5 18l1.5-4.5h8L17.5 18"></path><circle cx="8.7" cy="18" r="1.2"></circle><circle cx="15.3" cy="18" r="1.2"></circle><path d="M8 3v2.5M12 2.5v2.5M16 3v2.5"></path></svg></span>Ko'chma avtomoyka</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.5</b> <span style="color:var(--slate)">(74)</span></span>
+          <span>Yunusobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234520"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="20">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="7" id="card-7">
+      <div class="dist-col"><div class="dist-km">9.3</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Avto Servis Yunusobod</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"></path></svg></span>Moy almashtirish</span><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.4</b> <span style="color:var(--slate)">(52)</span></span>
+          <span>Yunusobod</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234507"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="7">Batafsil</button>
+      </div>
+    </div><div class="card " data-id="18" id="card-18">
+      <div class="dist-col"><div class="dist-km">10.4</div><div class="dist-unit">km uzoq</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">Gruzovoy Master</span>
+          
+          
+          
+        </div>
+        <div class="svc-tags"><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V7a1 1 0 0 1 1-1h9v9"></path><path d="M13 10h4l3 3v2h-2"></path><path d="M11 15H9"></path><circle cx="7" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg></span>Yuk mashinalari servisi</span><span class="stag"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 20h12M9 4v2l6 2-6 2 6 2-6 2 6 2v2"></path></svg></span>Xodovoy ta'miri</span></div>
+        <div class="meta-row">
+          <span class="rating"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"></path></svg><b>4.3</b> <span style="color:var(--slate)">(41)</span></span>
+          <span>Bektemir</span>
+          <span class="open-now "><span class="dot"></span>Hozir ochiq</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:+998901234518"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"></path></svg>Qo'ng'iroq</a>
+        <button class="details" data-id="18">Batafsil</button>
+      </div>
+    </div></div>
+  </main>
+
+  <aside class="side side-right">
+    <div class="panel">
+      <div class="panel-title" data-i18n="panelHow">Qanday ishlaydi?</div>
+      <div class="how">
+        <div class="how-step"><span class="how-n">1</span><span data-i18n="howStep1">Xizmat turini tanlang</span></div>
+        <div class="how-step"><span class="how-n">2</span><span data-i18n="howStep2">Eng yaqin ustaxonani toping</span></div>
+        <div class="how-step"><span class="how-n">3</span><span data-i18n="howStep3">To'g'ridan-to'g'ri qo'ng'iroq qiling</span></div>
+      </div>
+    </div>
+    <div class="panel cta">
+      <div class="cta-title" data-i18n="ctaTitle">Ustaxonangiz bormi?</div>
+      <p class="cta-text" data-i18n="ctaText">Ro'yxatga qo'shing va mijozlar sizni topsin.</p>
+      <button class="cta-btn" id="ctaAdd" data-i18n="ctaBtn">Xizmatingizni qo'shing</button>
+    </div>
+  </aside>
+</div>
+
+<div class="overlay" id="detailOverlay"><div class="modal" id="detailModal"></div></div>
+
+<div class="overlay" id="addOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 data-i18n="addTitle">Xizmatingizni qo'shing</h2>
+      <button class="close-x" data-close="addOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--slate);margin:0 0 16px" data-i18n="addDesc">Ustaxonangizni ro'yxatga qo'shing — haydovchilar sizni hududi va xizmat turi bo'yicha topadi.</p>
+      <div class="form-field"><span data-i18n="fldName">Ustaxona nomi</span><input type="text" id="fName" data-i18n-ph="phName" placeholder="Masalan: Vulkan Servis 24"></div>
+      <div class="form-field"><span data-i18n="fldServices">Xizmat turi</span><div class="chk-grid" id="fServices"></div></div>
+      <div class="form-field"><span data-i18n="fldRegion">Hudud</span><select id="fRegion"></select></div>
+      <div class="form-field" id="fSubField"><span data-i18n="fldSub">Tuman / Shahar</span><select id="fSub"></select></div>
+      <div class="form-field"><span data-i18n="fldAddr">Aniq manzil (ko'cha, mo'ljal)</span><input type="text" id="fAddr" data-i18n-ph="phAddr" placeholder="Masalan: Bunyodkor ko'chasi, 12"></div>
+      <div class="form-field"><span data-i18n="fldDesc">Izoh (xizmatlar / mahsulotlar)</span><textarea id="fDesc" rows="3" data-i18n-ph="phDesc" placeholder="Nimalar qilishingiz yoki qanday mahsulotlaringiz borligini erkin yozing"></textarea></div>
+      <div class="form-field">
+        <span data-i18n="fldLoc">Joylashuv (xaritada nuqta)</span>
+        <button type="button" class="loc-set-btn" id="fLocBtn"></button>
+        <div class="loc-result" id="fLocResult"></div>
+      </div>
+      <div class="form-field"><span data-i18n="fldPhone">Telefon raqami</span><input type="tel" id="fPhone" data-i18n-ph="phPhone" placeholder="+998 90 123-45-67"></div>
+      <button class="submit" id="fSubmit" data-i18n="addSubmit">Ariza yuborish</button>
+    </div>
+  </div>
+</div>
+
+<button class="ai-fab" id="aiFab">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3Z"/><path d="M18.5 14l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z"/></svg>
+  <span data-i18n="aiFab">AI yordamchi</span>
+</button>
+<div class="ai-panel" id="aiPanel">
+  <div class="ai-head">
+    <div class="ai-htitle">
+      <span class="ai-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3Z"/></svg></span>
+      <div><div class="tt" data-i18n="aiTitle">AI yordamchi</div><div class="ss" data-i18n="aiSubtitle">Muammoni yozing — xizmatni topaman</div></div>
+    </div>
+    <button class="ai-close" id="aiClose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="ai-msgs" id="aiMsgs"></div>
+  <div class="ai-chips" id="aiChips"></div>
+  <div class="ai-input">
+    <input type="text" id="aiInput" data-i18n-ph="aiPh" placeholder="Muammoingizni yozing…">
+    <button class="ai-send" id="aiSend"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-6-7-2Z"/></svg></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+window.addEventListener('error', function(ev){
+  var b = document.getElementById('errBanner');
+  if(!b){ b = document.createElement('div'); b.id='errBanner';
+    b.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#B91C1C;color:#fff;font:12px/1.45 monospace;padding:11px 14px;white-space:pre-wrap;box-shadow:0 -4px 16px rgba(0,0,0,.2)';
+    (document.body||document.documentElement).appendChild(b); }
+  b.textContent = 'JS xato: ' + (ev.message || (ev.error && ev.error.message) || '?') + (ev.lineno ? ('  ['+ev.lineno+':'+ev.colno+']') : '');
+});
+/* ---------------- i18n ---------------- */
+const T = {
+  uz:{
+    brandTag:"Eng yaqin avto yordam", addBtn:"Xizmatingizni qo'shing", svcTypeLabel:"Xizmat turi",
+    regionLabel:"Hudud", subLabel:"Tuman / Shahar", sortLabel:"Tartiblash",
+    sortDist:"Masofa", sortPrice:"Narx", sortRating:"Reyting",
+    resultsTitle:"Xizmat ko'rsatish markazlari", found:"ta topildi",
+    byDist:"masofa bo'yicha", byPrice:"narx bo'yicha", byRating:"reyting bo'yicha",
+    radarTitle:"Yaqinlik xaritasi", live:"JONLI",
+    legendYou:"Siz — joriy joylashuv", legendServices:"Mavjud xizmatlar · nuqtani bosing",
+    badgeNear:"Eng yaqin", badge24:"24 soat", badgeVerif:"Tasdiqlangan",
+    unitKm:"km uzoq", unitM:"m uzoq", fromPrice:"so'mdan", pricePrefix:"",
+    openNow:"Hozir ochiq", closed:"Yopiq", call:"Qo'ng'iroq", details:"Batafsil",
+    locDetecting:"Joylashuv aniqlanmoqda…", locGps:"Joriy joylashuv (GPS)",
+    toastGps:"Joylashuv aniqlandi — eng yaqin xizmatlar ko'rsatilmoqda",
+    dMasofa:"Masofa", dNarx:"Narx", dReyting:"Reyting", dVaqt:"Ish vaqti", h24full:"24 soat", dHudud:"Hudud",
+    dLoc:"Joylashuv", navOpen:"Navigatorda ochish", navYandex:"Yandex Navigator", navGoogle:"Google Xarita",
+    dDesc:"Izoh", fldDesc:"Izoh (xizmatlar / mahsulotlar)", phDesc:"Nimalar qilishingiz yoki qanday mahsulotlaringiz borligini erkin yozing",
+    addTitle:"Xizmatingizni qo'shing", addDesc:"Ustaxonangizni ro'yxatga qo'shing — haydovchilar sizni hududi va xizmat turi bo'yicha topadi.",
+    fldName:"Ustaxona nomi", phName:"Masalan: Vulkan Servis 24", fldServices:"Xizmat turi",
+    fldRegion:"Hudud", fldSub:"Tuman / Shahar", fldAddr:"Aniq manzil (ko'cha, mo'ljal)", phAddr:"Masalan: Bunyodkor ko'chasi, 12",
+    fldLoc:"Joylashuv (xaritada nuqta)", locSetBtn:"Joriy joylashuvni belgilash", locSetDone:"Joylashuv belgilandi", locSaved:"xaritada saqlandi",
+    fldPhone:"Telefon raqami", phPhone:"+998 90 123-45-67", addSubmit:"Ariza yuborish",
+    toastNoName:"Ustaxona nomini kiriting", toastSubmitted:"Arizangiz qabul qilindi — tez orada bog'lanamiz (demo)",
+    emptyRegionTitle:"Bu hududda hozircha xizmat yo'q", emptyRegionDesc:"Platforma hozircha Toshkent shahrida ishlamoqda — bu hudud tez orada qo'shiladi.",
+    emptyTitle:"Bu shartlar bo'yicha xizmat topilmadi", emptyDesc:"Boshqa xizmat turi yoki hududni tanlab ko'ring.",
+    emptyBtn:"Barcha hududlarni ko'rsatish", allRegions:"Barcha hududlar", allSubs:"Barcha tumanlar",
+    panelFilters:"Filtrlar", panelHow:"Qanday ishlaydi?", howStep1:"Xizmat turini tanlang", howStep2:"Eng yaqin ustaxonani toping", howStep3:"To'g'ridan-to'g'ri qo'ng'iroq qiling", ctaTitle:"Ustaxonangiz bormi?", ctaText:"Ro'yxatga qo'shing va mijozlar sizni topsin.", ctaBtn:"Xizmatingizni qo'shing", statServices:"xizmat", statRegions:"hudud", statShops:"ustaxona",
+    aiFab:"AI yordamchi", aiTitle:"AI yordamchi", aiSubtitle:"Muammoni yozing — xizmatni topaman", aiPh:"Muammoingizni yozing…", aiGreeting:"Salom! Avtomobilingizda nima muammo yuz berdi? Masalan: «g'ildiragim teshildi» yoki «moshina yurmayapti». Sizga mos ustani topib beraman.", aiNoMatch:"Tushunmadim. Muammoni boshqacharoq yozib ko'ring yoki tepadagi xizmat turlaridan tanlang.", aiChip1:"G'ildirak teshildi", aiChip2:"Moshina yurmayapti", aiChip3:"Moshinani yuvish", aiChip4:"Moy almashtirish",
+  },
+  ru:{
+    brandTag:"Ближайшая автопомощь", addBtn:"Добавить услугу", svcTypeLabel:"Тип услуги",
+    regionLabel:"Регион", subLabel:"Район / Город", sortLabel:"Сортировка",
+    sortDist:"Расстояние", sortPrice:"Цена", sortRating:"Рейтинг",
+    resultsTitle:"Центры обслуживания", found:"найдено",
+    byDist:"по расстоянию", byPrice:"по цене", byRating:"по рейтингу",
+    radarTitle:"Карта близости", live:"LIVE",
+    legendYou:"Вы — текущее местоположение", legendServices:"Доступные услуги · нажмите точку",
+    badgeNear:"Ближайший", badge24:"24 часа", badgeVerif:"Проверено",
+    unitKm:"км", unitM:"м", fromPrice:"сум", pricePrefix:"от ",
+    openNow:"Открыто", closed:"Закрыто", call:"Позвонить", details:"Подробнее",
+    locDetecting:"Определение местоположения…", locGps:"Текущее местоположение (GPS)",
+    toastGps:"Местоположение определено — показаны ближайшие услуги",
+    dMasofa:"Расстояние", dNarx:"Цена", dReyting:"Рейтинг", dVaqt:"Часы работы", h24full:"круглосуточно", dHudud:"Регион",
+    dLoc:"Местоположение", navOpen:"Открыть в навигаторе", navYandex:"Яндекс Навигатор", navGoogle:"Google Карты",
+    dDesc:"Описание", fldDesc:"Описание (услуги / товары)", phDesc:"Опишите свободно, что делаете или какие товары у вас есть",
+    addTitle:"Добавить свою услугу", addDesc:"Добавьте свою мастерскую — водители найдут вас по региону и типу услуги.",
+    fldName:"Название мастерской", phName:"Например: Вулкан Сервис 24", fldServices:"Тип услуги",
+    fldRegion:"Регион", fldSub:"Район / Город", fldAddr:"Точный адрес (улица, ориентир)", phAddr:"Например: улица Бунёдкор, 12",
+    fldLoc:"Местоположение (точка на карте)", locSetBtn:"Отметить текущее местоположение", locSetDone:"Местоположение отмечено", locSaved:"сохранено на карте",
+    fldPhone:"Номер телефона", phPhone:"+998 90 123-45-67", addSubmit:"Отправить заявку",
+    toastNoName:"Введите название мастерской", toastSubmitted:"Заявка принята — скоро свяжемся (демо)",
+    emptyRegionTitle:"В этом регионе пока нет услуг", emptyRegionDesc:"Платформа пока работает в городе Ташкенте — этот регион скоро добавится.",
+    emptyTitle:"По этим условиям услуги не найдены", emptyDesc:"Попробуйте другой тип услуги или регион.",
+    emptyBtn:"Показать все регионы", allRegions:"Все регионы", allSubs:"Все районы",
+    panelFilters:"Фильтры", panelHow:"Как это работает?", howStep1:"Выберите тип услуги", howStep2:"Найдите ближайшую мастерскую", howStep3:"Позвоните напрямую", ctaTitle:"Есть мастерская?", ctaText:"Добавьте её, и клиенты вас найдут.", ctaBtn:"Добавить услугу", statServices:"услуг", statRegions:"регионов", statShops:"мастерских",
+    aiFab:"AI помощник", aiTitle:"AI помощник", aiSubtitle:"Опишите проблему — найду услугу", aiPh:"Опишите проблему…", aiGreeting:"Здравствуйте! Что случилось с машиной? Например: «пробил колесо» или «машина не заводится». Найду для вас подходящего мастера.", aiNoMatch:"Не понял. Опишите иначе или выберите тип услуги сверху.", aiChip1:"Пробил колесо", aiChip2:"Не заводится", aiChip3:"Помыть машину", aiChip4:"Замена масла",
+  }
+};
+function t(k){ return T[state.lang][k]; }
+
+/* ---------------- Data ---------------- */
+const CITY = {lat:41.311, lng:69.279};
+let base = {...CITY};
+
+// Toshkent shahri tumanlari (koordinatalar bilan — provayderlar shu yerda)
+const TASHKENT_SUBS = {
+  yunusobod:{name:'Yunusobod', lat:41.367, lng:69.289},
+  chilonzor:{name:'Chilonzor', lat:41.285, lng:69.204},
+  ulugbek:{name:"Mirzo Ulug'bek", lat:41.331, lng:69.342},
+  yakkasaroy:{name:'Yakkasaroy', lat:41.293, lng:69.263},
+  shayxontohur:{name:'Shayxontohur', lat:41.323, lng:69.233},
+  olmazor:{name:'Olmazor', lat:41.361, lng:69.223},
+  yashnobod:{name:'Yashnobod', lat:41.301, lng:69.331},
+  sergeli:{name:'Sergeli', lat:41.223, lng:69.221},
+  uchtepa:{name:'Uchtepa', lat:41.301, lng:69.183},
+  mirobod:{name:'Mirobod', lat:41.301, lng:69.291},
+  bektemir:{name:'Bektemir', lat:41.208, lng:69.333},
+  yangihayot:{name:'Yangihayot', lat:41.239, lng:69.199},
+};
+
+// Barcha viloyatlar va ularning tumanlari (nomlar bo'yicha; koordinata viloyat markazidan)
+const RD = {
+  toshkent_vil:{name:'Toshkent viloyati', nameRu:'Ташкентская область', center:{lat:41.04,lng:69.36}, districts:['Bekobod',"Bo'stonliq","Bo'ka",'Chinoz','Qibray','Ohangaron',"Oqqo'rg'on",'Parkent','Piskent','Quyichirchiq','Zangiota',"O'rtachirchiq","Yangiyo'l",'Yuqorichirchiq','Toshkent']},
+  andijon:{name:'Andijon viloyati', nameRu:'Андижанская область', center:{lat:40.78,lng:72.34}, districts:['Andijon','Asaka','Baliqchi',"Bo'ston",'Buloqboshi','Izboskan','Jalaquduq',"Xo'jaobod","Qo'rg'ontepa",'Marhamat',"Oltinko'l",'Paxtaobod','Shahrixon',"Ulug'nor"]},
+  buxoro:{name:'Buxoro viloyati', nameRu:'Бухарская область', center:{lat:39.77,lng:64.42}, districts:['Olot','Buxoro',"G'ijduvon",'Jondor','Kogon',"Qorako'l",'Qorovulbozor','Peshku','Romitan','Shofirkon','Vobkent']},
+  fargona:{name:"Farg'ona viloyati", nameRu:'Ферганская область', center:{lat:40.39,lng:71.79}, districts:['Oltiariq',"Bag'dod",'Beshariq','Buvayda',"Dang'ara","Farg'ona",'Furqat',"Qo'shtepa",'Quva','Rishton',"So'x",'Toshloq',"Uchko'prik","O'zbekiston",'Yozyovon']},
+  jizzax:{name:'Jizzax viloyati', nameRu:'Джизакская область', center:{lat:40.12,lng:67.84}, districts:['Arnasoy','Baxmal',"Do'stlik",'Forish',"G'allaorol",'Sharof Rashidov',"Mirzacho'l",'Paxtakor','Yangiobod','Zomin','Zafarobod','Zarbdor']},
+  namangan:{name:'Namangan viloyati', nameRu:'Наманганская область', center:{lat:40.99,lng:71.67}, districts:['Chortoq','Chust','Kosonsoy','Mingbuloq','Namangan','Norin','Pop',"To'raqo'rg'on","Uchqo'rg'on",'Uychi',"Yangiqo'rg'on"]},
+  navoiy:{name:'Navoiy viloyati', nameRu:'Навоийская область', center:{lat:40.10,lng:65.38}, districts:['Konimex','Qiziltepa','Xatirchi','Navbahor','Karmana','Nurota','Tomdi','Uchquduq']},
+  qashqadaryo:{name:'Qashqadaryo viloyati', nameRu:'Кашкадарьинская область', center:{lat:38.86,lng:65.79}, districts:['Chiroqchi','Dehqonobod',"G'uzor",'Qamashi','Qarshi','Koson','Kasbi','Kitob','Mirishkor','Muborak','Nishon','Shahrisabz',"Yakkabog'"]},
+  qoraqalpogiston:{name:"Qoraqalpog'iston Respublikasi", nameRu:'Республика Каракалпакстан', center:{lat:42.46,lng:59.61}, districts:['Amudaryo','Beruniy','Chimboy',"Ellikqal'a",'Kegeyli',"Mo'ynoq",'Nukus',"Qanliko'l","Qo'ng'irot","Qorao'zak",'Shumanay',"Taxtako'pir","To'rtko'l","Xo'jayli",'Taxiatosh',"Bo'zatov"]},
+  samarqand:{name:'Samarqand viloyati', nameRu:'Самаркандская область', center:{lat:39.65,lng:66.96}, districts:["Bulung'ur",'Ishtixon','Jomboy',"Kattaqo'rg'on","Qo'shrabot",'Narpay','Nurobod','Oqdaryo','Paxtachi','Payariq',"Pastdarg'om",'Samarqand','Toyloq','Urgut']},
+  sirdaryo:{name:'Sirdaryo viloyati', nameRu:'Сырдарьинская область', center:{lat:40.49,lng:68.78}, districts:['Oqoltin','Boyovut','Guliston','Xovos','Mirzaobod','Sardoba','Sayxunobod','Sirdaryo']},
+  surxondaryo:{name:'Surxondaryo viloyati', nameRu:'Сурхандарьинская область', center:{lat:37.22,lng:67.28}, districts:['Angor','Bandixon','Boysun','Denov',"Jarqo'rg'on",'Qiziriq',"Qumqo'rg'on",'Muzrabot','Oltinsoy','Sariosiyo','Sherobod',"Sho'rchi",'Termiz','Uzun']},
+  xorazm:{name:'Xorazm viloyati', nameRu:'Хорезмская область', center:{lat:41.55,lng:60.63}, districts:["Bog'ot",'Gurlan','Xonqa','Hazorasp','Xiva',"Qo'shko'pir",'Shovot','Urganch','Yangiariq','Yangibozor',"Tuproqqal'a"]},
+};
+
+// Toshkent shahri tumanlarining ruscha nomlari (qolganlari lotinchada fallback)
+const SUB_RU = {yunusobod:'Юнусабад', chilonzor:'Чиланзар', ulugbek:'Мирзо-Улугбек', yakkasaroy:'Яккасарай', shayxontohur:'Шайхантахур', olmazor:'Алмазар', yashnobod:'Яшнабад', sergeli:'Сергели', uchtepa:'Учтепа', mirobod:'Мирабад', bektemir:'Бектемир', yangihayot:'Янгихаёт'};
+
+// REGIONS ni yig'ish
+function slug(s){ return s.toLowerCase().replace(/[ʻ'`]/g,'').replace(/[^a-z0-9]+/g,''); }
+const REGIONS = { toshkent_shahri:{name:'Toshkent shahri', nameRu:'город Ташкент', center:CITY, subs:TASHKENT_SUBS} };
+for(const [k,r] of Object.entries(RD)){
+  const subs = {};
+  r.districts.forEach(n => { subs[slug(n)] = {name:n}; });
+  REGIONS[k] = {name:r.name, nameRu:r.nameRu, center:r.center, subs};
+}
+
+const SERVICES = [
+  {id:'hammasi', nameUz:'Barchasi', nameRu:'Все', icon:'grid'},
+  {id:'evakuator', nameUz:'Evakuator', nameRu:'Эвакуатор', icon:'tow'},
+  {id:'vulkanizatsiya', nameUz:'Vulkanizatsiya', nameRu:'Шиномонтаж', icon:'tire'},
+  {id:'elektrik', nameUz:'Avto elektrik', nameRu:'Автоэлектрик', icon:'bolt'},
+  {id:'yoqilgi', nameUz:"Yoqilg'i yetkazish", nameRu:'Доставка топлива', icon:'fuel'},
+  {id:'moy', nameUz:'Moy almashtirish', nameRu:'Замена масла', icon:'oil'},
+  {id:'xodovoy', nameUz:"Xodovoy ta'miri", nameRu:'Ремонт ходовой', icon:'spring'},
+  {id:'yuk', nameUz:'Yuk mashinalari servisi', nameRu:'Грузовой сервис', icon:'truck'},
+  {id:'avtomoyka', nameUz:"Ko'chma avtomoyka", nameRu:'Выездная автомойка', icon:'wash'},
+  {id:'zapchast', nameUz:'Ehtiyot qismlar', nameRu:'Автозапчасти', icon:'part'},
+];
+const SVC = Object.fromEntries(SERVICES.map(s=>[s.id,s]));
+
+const PROVIDERS = [
+  {id:1, name:'Tez Yordam Evakuator', services:['evakuator'], region:'toshkent_shahri', sub:'yakkasaroy', lat:41.291, lng:69.266, price:120000, rating:4.9, reviews:213, open:'24', verified:true, phone:'+998901234501'},
+  {id:2, name:'Vulkan Servis 24', services:['vulkanizatsiya'], region:'toshkent_shahri', sub:'yakkasaroy', lat:41.296, lng:69.259, price:25000, rating:4.7, reviews:156, open:'24', verified:true, phone:'+998901234502'},
+  {id:3, name:'Avto Elektrik Sardor', services:['elektrik'], region:'toshkent_shahri', sub:'chilonzor', lat:41.283, lng:69.208, price:60000, rating:4.8, reviews:98, open:'08:00–21:00', verified:false, phone:'+998901234503'},
+  {id:4, name:"Yo'lda Servis", services:['evakuator'], region:'toshkent_shahri', sub:'chilonzor', lat:41.288, lng:69.199, price:130000, rating:4.6, reviews:74, open:'24', verified:true, phone:'+998901234504'},
+  {id:5, name:'Shina Master', services:['vulkanizatsiya'], region:'toshkent_shahri', sub:'ulugbek', lat:41.334, lng:69.339, price:20000, rating:4.5, reviews:61, open:'07:00–22:00', verified:false, phone:'+998901234505'},
+  {id:6, name:'Avto Elektrik Doston', services:['elektrik'], region:'toshkent_shahri', sub:'yunusobod', lat:41.365, lng:69.292, price:50000, rating:4.9, reviews:187, open:'09:00–20:00', verified:true, phone:'+998901234506'},
+  {id:7, name:'Avto Servis Yunusobod', services:['moy','vulkanizatsiya'], region:'toshkent_shahri', sub:'yunusobod', lat:41.371, lng:69.285, price:20000, rating:4.4, reviews:52, open:'08:00–20:00', verified:false, phone:'+998901234507'},
+  {id:8, name:'Evakuator Nur', services:['evakuator'], region:'toshkent_shahri', sub:'olmazor', lat:41.359, lng:69.226, price:110000, rating:4.7, reviews:143, open:'24', verified:true, phone:'+998901234508'},
+  {id:9, name:'Premium Auto Elektrik', services:['elektrik'], region:'toshkent_shahri', sub:'mirobod', lat:41.303, lng:69.288, price:80000, rating:4.8, reviews:66, open:'09:00–19:00', verified:true, phone:'+998901234509'},
+  {id:10, name:'Vulkanizatsiya Express', services:['vulkanizatsiya','yoqilgi'], region:'toshkent_shahri', sub:'shayxontohur', lat:41.325, lng:69.236, price:22000, rating:4.3, reviews:39, open:'24', verified:false, phone:'+998901234510'},
+  {id:11, name:"Yoqilg'i Yetkazish 24", services:['yoqilgi'], region:'toshkent_shahri', sub:'mirobod', lat:41.297, lng:69.294, price:35000, rating:4.6, reviews:28, open:'24', verified:true, phone:'+998901234511'},
+  {id:12, name:'Moy Servis Yashnobod', services:['moy'], region:'toshkent_shahri', sub:'yashnobod', lat:41.304, lng:69.328, price:45000, rating:4.5, reviews:84, open:'08:00–20:00', verified:false, phone:'+998901234512'},
+  {id:13, name:'Tungi Evakuator', services:['evakuator','vulkanizatsiya'], region:'toshkent_shahri', sub:'sergeli', lat:41.225, lng:69.224, price:100000, rating:4.2, reviews:47, open:'24', verified:false, phone:'+998901234513'},
+  {id:14, name:'Auto Help Uchtepa', services:['vulkanizatsiya'], region:'toshkent_shahri', sub:'uchtepa', lat:41.303, lng:69.186, price:30000, rating:4.7, reviews:71, open:'08:00–22:00', verified:true, phone:'+998901234514'},
+  {id:15, name:'Xodovoy Servis Pro', services:['xodovoy'], region:'toshkent_shahri', sub:'chilonzor', lat:41.287, lng:69.206, price:80000, rating:4.6, reviews:92, open:'08:00–20:00', verified:true, phone:'+998901234515'},
+  {id:16, name:"Osma va Xodovoy Markazi", services:['xodovoy','vulkanizatsiya'], region:'toshkent_shahri', sub:'yashnobod', lat:41.306, lng:69.325, price:70000, rating:4.4, reviews:55, open:'09:00–19:00', verified:false, phone:'+998901234516'},
+  {id:17, name:'Yuk Servis 24', services:['yuk'], region:'toshkent_shahri', sub:'sergeli', lat:41.227, lng:69.226, price:200000, rating:4.5, reviews:63, open:'24', verified:true, phone:'+998901234517'},
+  {id:18, name:'Gruzovoy Master', services:['yuk','xodovoy'], region:'toshkent_shahri', sub:'bektemir', lat:41.210, lng:69.335, price:180000, rating:4.3, reviews:41, open:'08:00–21:00', verified:false, phone:'+998901234518'},
+  {id:19, name:"Ko'chma Avtomoyka", services:['avtomoyka'], region:'toshkent_shahri', sub:'mirobod', lat:41.299, lng:69.293, price:40000, rating:4.7, reviews:128, open:'08:00–22:00', verified:true, phone:'+998901234519'},
+  {id:20, name:'Mobil Avto Yuvish', services:['avtomoyka'], region:'toshkent_shahri', sub:'yunusobod', lat:41.369, lng:69.287, price:35000, rating:4.5, reviews:74, open:'09:00–21:00', verified:false, phone:'+998901234520'},
+  {id:21, name:'Avto Ehtiyot Qismlar', services:['zapchast'], region:'toshkent_shahri', sub:'sergeli', lat:41.229, lng:69.223, price:15000, rating:4.5, reviews:110, open:'09:00–19:00', verified:true, phone:'+998901234521'},
+  {id:22, name:'Zapchast Bozori', services:['zapchast'], region:'toshkent_shahri', sub:'chilonzor', lat:41.281, lng:69.210, price:10000, rating:4.3, reviews:87, open:'08:00–20:00', verified:false, phone:'+998901234522'},
+  {id:23, name:'Original Zapchast', services:['zapchast','moy'], region:'toshkent_shahri', sub:'yunusobod', lat:41.363, lng:69.290, price:20000, rating:4.7, reviews:64, open:'09:00–18:00', verified:true, phone:'+998901234523'},
+];
+
+// Ustalar o'zi yozadigan izoh (nima xizmat / mahsulot)
+const DESC = {
+  1:"Shahar bo'ylab tezkor evakuator, 24/7 chaqiruv. Yengil va o'rta yuk avtomobillari.",
+  2:"Shina almashtirish, yamash, balansirovka. Barcha o'lchamdagi g'ildiraklar.",
+  3:"Generator, starter, provodka va signalizatsiya ta'miri. Chevrolet va Daewoo bo'yicha tajriba.",
+  4:"Yo'lda qolgan avtomobillarni evakuatsiya qilish va joyida mayda ta'mir.",
+  5:"Shinalarni yamash, montaj-demontaj, azot bilan to'ldirish.",
+  6:"Diagnostika, elektr tizimi, konditsioner to'ldirish. Kia va Hyundai bo'yicha.",
+  7:"Moy va filtr almashtirish, vulkanizatsiya, mayda ta'mir.",
+  8:"24 soat evakuator va kran-manipulyator xizmati.",
+  9:"Yevropa avtomobillari elektrikasi: BMW, Mercedes, Audi. Kompyuter diagnostikasi.",
+  10:"Tezkor vulkanizatsiya va yoqilg'i yetkazish. 24 soat.",
+  11:"Benzin va dizel yetkazib berish, akkumulyator quvvatlash.",
+  12:"Motor moyi, transmissiya moyi va filtrlarni almashtirish.",
+  13:"Kechayu kunduz evakuator va joyida shina ta'miri.",
+  14:"Vulkanizatsiya, disk to'g'rilash, g'ildirak balansirovkasi.",
+  15:"Rul nakonechniklari, sharnirlar, amortizatorlar va saylentbloklar ta'miri.",
+  16:"Osma tizimi diagnostikasi va ta'miri, vulkanizatsiya.",
+  17:"Yuk mashinalari uchun ta'mir, shina va evakuatsiya. 24 soat.",
+  18:"Yuk avtomobillari xodovoy va tormoz tizimi ta'miri.",
+  19:"Manzilingizga borib avtomobil yuvish: kuzov, salon, dvigatel.",
+  20:"Ko'chma yuvish xizmati, quruq tozalash va polirovka.",
+  21:"Chevrolet, Daewoo, Ravon uchun original va analog ehtiyot qismlar.",
+  22:"Keng assortiment: filtrlar, tormoz kolodkalari, xodovoy qismlari.",
+  23:"Original ehtiyot qismlar va moylash materiallari sotuvi.",
+};
+
+/* ---------------- State ---------------- */
+const state = {lang:'uz', service:'hammasi', region:'all', sub:'all', sort:'masofa', gps:false, locSet:false};
+
+/* ---------------- Name helpers ---------------- */
+function svcName(id){ return state.lang==='ru' ? SVC[id].nameRu : SVC[id].nameUz; }
+function regionName(id){ return state.lang==='ru' ? (REGIONS[id].nameRu||REGIONS[id].name) : REGIONS[id].name; }
+function subDisp(region, sub){
+  if(state.lang==='ru' && SUB_RU[sub]) return SUB_RU[sub];
+  return REGIONS[region].subs[sub].name;
+}
+function subBase(region, sub){
+  const s = REGIONS[region].subs[sub];
+  return (s && s.lat!=null) ? {lat:s.lat, lng:s.lng} : {...REGIONS[region].center};
+}
+
+/* ---------------- Icons ---------------- */
+const PIN = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7Z"/><circle cx="12" cy="9" r="2.2"/></svg>';
+function icon(name){
+  const p = {
+    grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+    tow:'<path d="M3 17V9h9l3 3h4a2 2 0 0 1 2 2v3"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M12 9V6h5l3 4"/>',
+    tire:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/>',
+    bolt:'<path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"/>',
+    fuel:'<path d="M4 21V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v15M3 21h13"/><path d="M4 12h10M14 8l3 3v6.5a2 2 0 0 0 3-1.5V10l-3-3"/>',
+    oil:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"/>',
+    spring:'<path d="M6 4h12M6 20h12M9 4v2l6 2-6 2 6 2-6 2 6 2v2"/>',
+    truck:'<path d="M3 15V7a1 1 0 0 1 1-1h9v9"/><path d="M13 10h4l3 3v2h-2"/><path d="M11 15H9"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+    wash:'<path d="M5 18h14"/><path d="M6.5 18l1.5-4.5h8L17.5 18"/><circle cx="8.7" cy="18" r="1.2"/><circle cx="15.3" cy="18" r="1.2"/><path d="M8 3v2.5M12 2.5v2.5M16 3v2.5"/>',
+    part:'<rect x="8.5" y="3" width="7" height="6" rx="1.5"/><path d="M8.5 5.4h7M12 9v3"/><circle cx="12" cy="16" r="3.2"/><circle cx="12" cy="16" r="1"/>',
+    phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/>',
+    star:'<path d="M12 3l2.5 5.5L20 9.2l-4 4 1 5.8L12 16l-5 3 1-5.8-4-4 5.5-.7L12 3Z"/>',
+  }[name] || '';
+  const filled = ['grid','bolt','oil','star'].includes(name);
+  return `<svg viewBox="0 0 24 24" fill="${filled?'currentColor':'none'}" stroke="${filled?'none':'currentColor'}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+}
+
+/* ---------------- Helpers ---------------- */
+function distKm(p){
+  const dx = (p.lng - base.lng) * Math.cos(base.lat*Math.PI/180) * 111.32;
+  const dy = (p.lat - base.lat) * 110.57;
+  return Math.hypot(dx, dy);
+}
+function fmtDist(km){ return km < 1 ? {n:Math.round(km*1000), u:'m'} : {n:km.toFixed(1), u:'km'}; }
+function fmtPrice(n){ return n.toLocaleString('ru-RU'); }
+function priceText(n){ return `${t('pricePrefix')}${fmtPrice(n)} ${t('fromPrice')}`; }
+function isOpen(open){
+  if(open === '24') return true;
+  const [s,e] = open.split('–').map(x=>parseInt(x));
+  const h = new Date().getHours();
+  return h >= s && h < e;
+}
+function byLabel(){ return state.sort==='masofa'?t('byDist'):t('byRating'); }
+
+/* ---------------- Filtering ---------------- */
+function getFiltered(){
+  let rows = PROVIDERS.map(p => ({...p, dist: distKm(p)}));
+  if(state.service !== 'hammasi') rows = rows.filter(p => p.services.includes(state.service));
+  if(!state.gps && state.region !== 'all'){
+    rows = rows.filter(p => p.region === state.region);
+    if(state.sub !== 'all') rows = rows.filter(p => p.sub === state.sub);
+  }
+  if(state.sort === 'masofa') rows.sort((a,b)=>a.dist-b.dist);
+  else if(state.sort === 'narx') rows.sort((a,b)=>a.price-b.price);
+  else rows.sort((a,b)=>b.rating-a.rating || b.reviews-a.reviews);
+  return rows;
+}
+
+/* ---------------- Render: services ---------------- */
+function renderServices(){
+  const el = document.getElementById('services');
+  el.innerHTML = SERVICES.map(s =>
+    `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic">${icon(s.icon)}</span>${svcName(s.id)}</button>`).join('');
+  el.querySelectorAll('.svc').forEach(b => b.onclick = () => { state.service = b.dataset.svc; renderAll(); });
+}
+
+/* ---------------- Render: list ---------------- */
+function renderList(){
+  const rows = getFiltered();
+  const list = document.getElementById('list');
+  const sub = document.querySelector('.results-head .sub');
+  sub.innerHTML = state.lang==='ru'
+    ? `${t('found')} <span class="count">${rows.length}</span> · ${byLabel()}`
+    : `<span class="count">${rows.length}</span> ${t('found')} · ${byLabel()}`;
+
+  if(rows.length === 0){
+    const emptyRegion = !state.gps && state.region!=='all' && !PROVIDERS.some(p=>p.region===state.region);
+    list.innerHTML = `<div class="empty">
+      <h3>${emptyRegion ? t('emptyRegionTitle') : t('emptyTitle')}</h3>
+      <p>${emptyRegion ? t('emptyRegionDesc') : t('emptyDesc')}</p>
+      <button onclick="resetFilters()">${t('emptyBtn')}</button>
+    </div>`;
+    return;
+  }
+
+  const nearestId = state.sort==='masofa' ? rows[0].id : [...rows].sort((a,b)=>a.dist-b.dist)[0].id;
+
+  list.innerHTML = rows.map(p => {
+    const d = fmtDist(p.dist);
+    const opened = isOpen(p.open);
+    const isNear = p.id === nearestId;
+    return `<div class="card ${isNear?'nearest':''}" data-id="${p.id}" id="card-${p.id}">
+      <div class="dist-col"><div class="dist-km">${d.n}</div><div class="dist-unit">${d.u==='km'?t('unitKm'):t('unitM')}</div></div>
+      <div class="mid">
+        <div class="name-row">
+          <span class="p-name">${p.name}</span>
+          ${isNear?`<span class="badge near">${t('badgeNear')}</span>`:''}
+          ${p.open==='24'?`<span class="badge h24">${t('badge24')}</span>`:''}
+          ${p.verified?`<span class="badge verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>${t('badgeVerif')}</span>`:''}
+        </div>
+        <div class="svc-tags">${p.services.map(s=>`<span class="stag"><span class="ic">${icon(SVC[s].icon)}</span>${svcName(s)}</span>`).join('')}</div>
+        <div class="meta-row">
+          <span class="rating">${icon('star')}<b>${p.rating}</b> <span style="color:var(--slate)">(${p.reviews})</span></span>
+          <span>${subDisp(p.region,p.sub)}</span>
+          <span class="open-now ${opened?'':'closed'}"><span class="dot"></span>${opened?t('openNow'):t('closed')}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="call" href="tel:${p.phone}">${icon('phone')}${t('call')}</a>
+        <button class="details" data-id="${p.id}">${t('details')}</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.details').forEach(b => b.onclick = () => openDetail(+b.dataset.id));
+  list.querySelectorAll('.call svg').forEach(s=>{s.setAttribute('width','16');s.setAttribute('height','16');});
+}
+
+/* ---------------- Detail modal ---------------- */
+function openDetail(id){
+  const p = PROVIDERS.find(x=>x.id===id);
+  const d = fmtDist(distKm(p));
+  const opened = isOpen(p.open);
+  const dl = 0.006;
+  const osm = `https://www.openstreetmap.org/export/embed.html?bbox=${(p.lng-dl).toFixed(5)},${(p.lat-dl).toFixed(5)},${(p.lng+dl).toFixed(5)},${(p.lat+dl).toFixed(5)}&layer=mapnik&marker=${p.lat.toFixed(5)},${p.lng.toFixed(5)}`;
+  const yandex = `https://yandex.uz/maps/?rtext=~${p.lat},${p.lng}&rtt=auto`;
+  const gmap = `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}&travelmode=driving`;
+  document.getElementById('detailModal').innerHTML = `
+    <div class="modal-head">
+      <div>
+        <h2>${p.name}</h2>
+        <div style="margin-top:6px" class="svc-tags">${p.services.map(s=>`<span class="stag"><span class="ic">${icon(SVC[s].icon)}</span>${svcName(s)}</span>`).join('')}</div>
+      </div>
+      <button class="close-x" data-close="detailOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="d-grid">
+        <div class="d-cell"><div class="k">${t('dMasofa')}</div><div class="v">${d.n} ${d.u}</div></div>
+        <div class="d-cell"><div class="k">${t('dReyting')}</div><div class="v">${p.rating} ★ <span style="font-size:12px;color:var(--slate);font-weight:400">(${p.reviews})</span></div></div>
+        <div class="d-cell"><div class="k">${t('dVaqt')}</div><div class="v ${opened?'go':''}" style="font-size:14px">${p.open==='24'?t('h24full'):p.open}</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--slate);margin-bottom:10px">${t('dHudud')}: <b style="color:var(--ink)">${regionName(p.region)}, ${subDisp(p.region,p.sub)}</b></div>
+      ${DESC[p.id]?`<div class="d-loc-label">${t('dDesc')}</div><p class="d-desc">${DESC[p.id]}</p>`:''}
+      <div class="d-loc-label">${t('dLoc')}</div>
+      <a class="map-link" href="${yandex}" target="_blank" rel="noopener">
+        <span class="map-fallback">${PIN}<span>${t('navOpen')}</span></span>
+        <iframe class="map-frame" src="${osm}" loading="lazy" title="map"></iframe>
+        <span class="map-pill">${PIN}${t('navOpen')}</span>
+      </a>
+      <div class="nav-row">
+        <a class="nav-btn primary" href="${yandex}" target="_blank" rel="noopener">${t('navYandex')}</a>
+        <a class="nav-btn ghost" href="${gmap}" target="_blank" rel="noopener">${t('navGoogle')}</a>
+      </div>
+      <a class="call" href="tel:${p.phone}">${icon('phone')} ${p.phone}</a>
+    </div>`;
+  document.getElementById('detailModal').querySelectorAll('.call svg').forEach(s=>{s.setAttribute('width','18');s.setAttribute('height','18');});
+  show('detailOverlay');
+}
+
+/* ---------------- Select fillers ---------------- */
+function fillRegionOptions(sel, includeAll){
+  const cur = sel.value;
+  sel.innerHTML = (includeAll?`<option value="all">${t('allRegions')}</option>`:'') +
+    Object.keys(REGIONS).map(k=>`<option value="${k}">${regionName(k)}</option>`).join('');
+  if(cur) sel.value = cur;
+}
+function fillSubOptions(sel, region, includeAll){
+  const cur = sel.value;
+  sel.innerHTML = (includeAll?`<option value="all">${t('allSubs')}</option>`:'') +
+    Object.keys(REGIONS[region].subs).map(k=>`<option value="${k}">${subDisp(region,k)}</option>`).join('');
+  if(cur) sel.value = cur;
+}
+
+/* ---------------- Location label ---------------- */
+function updateLocLabel(){
+  let txt;
+  if(!state.locSet) txt = t('locDetecting');
+  else if(state.gps) txt = t('locGps');
+  else if(state.region==='all') txt = regionName('toshkent_shahri');
+  else if(state.sub==='all') txt = regionName(state.region);
+  else txt = subDisp(state.region, state.sub);
+  document.getElementById('locLabel').textContent = txt;
+}
+
+/* ---------------- Setup ---------------- */
+function populateSelects(){
+  document.getElementById('fServices').innerHTML = SERVICES.filter(s=>s.id!=='hammasi')
+    .map(s=>`<label class="chk"><input type="checkbox" value="${s.id}"><span data-svcname="${s.id}">${svcName(s.id)}</span></label>`).join('');
+
+  const regionSel = document.getElementById('regionSel');
+  fillRegionOptions(regionSel, true);
+  regionSel.onchange = () => {
+    state.region = regionSel.value; state.sub = 'all'; state.gps = false; state.locSet = true;
+    if(regionSel.value === 'all'){ document.getElementById('subField').classList.add('hidden'); base = {...CITY}; }
+    else {
+      fillSubOptions(document.getElementById('subSel'), regionSel.value, true);
+      document.getElementById('subField').classList.remove('hidden');
+      base = {...REGIONS[regionSel.value].center};
+    }
+    updateLocLabel(); renderAll();
+  };
+
+  const subSel = document.getElementById('subSel');
+  subSel.onchange = () => {
+    state.sub = subSel.value; state.locSet = true;
+    base = subSel.value==='all' ? {...REGIONS[state.region].center} : subBase(state.region, subSel.value);
+    updateLocLabel(); renderAll();
+  };
+
+  document.querySelectorAll('#sortSeg button').forEach(btn => btn.onclick = () => {
+    state.sort = btn.dataset.sort;
+    document.querySelectorAll('#sortSeg button').forEach(x=>x.classList.toggle('on', x===btn));
+    renderAll();
+  });
+
+  const fRegion = document.getElementById('fRegion');
+  fillRegionOptions(fRegion, false);
+  const fSub = document.getElementById('fSub');
+  fillSubOptions(fSub, fRegion.value, false);
+  fRegion.onchange = () => fillSubOptions(fSub, fRegion.value, false);
+
+  document.getElementById('fLocBtn').onclick = () => {
+    const j = () => (Math.random()-.5)*0.04;
+    const lat = (CITY.lat+j()).toFixed(4), lng = (CITY.lng+j()).toFixed(4);
+    const btn = document.getElementById('fLocBtn');
+    btn.classList.add('done');
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>${t('locSetDone')}`;
+    const res = document.getElementById('fLocResult');
+    res.innerHTML = `${PIN}${lat}, ${lng} — ${t('locSaved')}`;
+    res.classList.add('show');
+  };
+}
+
+function resetFilters(){
+  state.service='hammasi'; state.region='all'; state.sub='all'; state.gps=false; state.locSet=true;
+  base={...CITY};
+  document.getElementById('regionSel').value='all';
+  document.getElementById('subField').classList.add('hidden');
+  updateLocLabel(); renderAll();
+}
+
+function detectLocation(){
+  const jitter = () => (Math.random()-.5)*0.05;
+  base = {lat:CITY.lat+jitter(), lng:CITY.lng+jitter()};
+  state.gps=true; state.region='all'; state.sub='all'; state.locSet=true;
+  document.getElementById('regionSel').value='all';
+  document.getElementById('subField').classList.add('hidden');
+  updateLocLabel();
+  toast(t('toastGps'));
+  renderAll();
+}
+
+/* ---------------- i18n apply ---------------- */
+function applyI18n(){
+  document.documentElement.lang = state.lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-svcname]').forEach(el=>{ el.textContent = svcName(el.dataset.svcname); });
+  const lb = document.getElementById('fLocBtn');
+  if(lb && !lb.classList.contains('done')) lb.innerHTML = `${PIN}${t('locSetBtn')}`;
+  renderAiChips();
+}
+
+/* ---------------- Modals / toast ---------------- */
+function show(id){ document.getElementById(id).classList.add('show'); }
+function hide(id){ document.getElementById(id).classList.remove('show'); }
+let toastT;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.innerHTML=`${PIN}<span>${msg}</span>`;
+  el.classList.add('show'); clearTimeout(toastT);
+  toastT=setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+/* ---------------- Language switch ---------------- */
+document.querySelectorAll('#langSeg button').forEach(btn => btn.onclick = () => {
+  if(state.lang === btn.dataset.lang) return;
+  state.lang = btn.dataset.lang;
+  document.querySelectorAll('#langSeg button').forEach(x=>x.classList.toggle('on', x===btn));
+  fillRegionOptions(document.getElementById('regionSel'), true);
+  if(state.region!=='all') fillSubOptions(document.getElementById('subSel'), state.region, true);
+  const fRegion = document.getElementById('fRegion');
+  fillRegionOptions(fRegion, false);
+  fillSubOptions(document.getElementById('fSub'), fRegion.value, false);
+  applyI18n(); updateLocLabel(); renderAll();
+});
+
+document.getElementById('locBtn').onclick = detectLocation;
+document.getElementById('addBtn').onclick = () => show('addOverlay');
+document.getElementById('ctaAdd').onclick = () => show('addOverlay');
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>hide(b.dataset.close));
+document.querySelectorAll('.overlay').forEach(o=>o.onclick=e=>{if(e.target===o)hide(o.id);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.show').forEach(o=>hide(o.id));});
+document.getElementById('fSubmit').onclick = () => {
+  const n=document.getElementById('fName').value.trim();
+  if(!n){toast(t('toastNoName'));return;}
+  hide('addOverlay'); toast(t('toastSubmitted'));
+  document.getElementById('fName').value=''; document.getElementById('fPhone').value=''; document.getElementById('fAddr').value=''; document.getElementById('fDesc').value='';
+  document.querySelectorAll('#fServices input:checked').forEach(c=>c.checked=false);
+  const lb=document.getElementById('fLocBtn'); lb.classList.remove('done'); lb.innerHTML = `${PIN}${t('locSetBtn')}`;
+  document.getElementById('fLocResult').classList.remove('show');
+};
+
+/* ---------------- AI assistant ---------------- */
+const AI_KW = {
+  vulkanizatsiya:["gildirak","g'ildirak","shina","teshil","ballon","balon","prokol","koles","disk","pokrishk","ballonim","шина","колес","прокол","спустил","баллон","диск","покрышк","резин"],
+  evakuator:["yurmay","yurmadi","avariya","halokat","evakua","dtp","olib ket","tortib ket","tortib bor","qamalib","ag'dar","urib ket","эвакуа","авари","дтп","тащ","букс","отвез","врезал","перевернул","yo'lda qol"],
+  elektrik:["elektr","provodka","provod","generator","starter","signalizatsiya","fara","konditsioner","akkum","akum","o'tirib qol","o't olma","ot olma","o'chib qol","zavod olma","quvvatsiz","электр","провод","генератор","стартер","сигнализ","фара","кондицион","аккум","сел ","замыкан","прикур","не завод","не заводит"],
+  yoqilgi:["benzin","yoqilg","dizel","solyar","yonilg","топлив","бензин","дизел","заправ","кончил","солярк","заканч"],
+  moy:["moy alma","moy alm","moyni alma","motor moy","moy quy","moyi alm","filtr","масло","масл","фильтр","замена масла","zamena masla"],
+  xodovoy:["xodovoy","osma","amortizator","sharnir","saylentblok","rul uch","taqilla","g'ijirla","tovush chiq","tebran","ходов","амортизатор","подвеск","стук","рычаг","шаров","рулев","сайлент","скрип","гремит"],
+  yuk:["yuk avto","yuk mashina","fura","gruzovik","kamaz","isuzu","газель","грузов","фура","камаз"],
+  avtomoyka:["yuvish","yuvib","yuvdir","iflos","kir bo","kirlan","moyka","tozala","мойка","помыть","мыть","грязн","чистк","помой","химчистк"],
+  zapchast:["zapchast","ehtiyot qism","detal","zapask","kolodka","запчаст","детал","sotib ol","купить","запаск","приобрест","kerak qism","колодк"],
+};
+let aiOpened = false;
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function aiAddMsg(role, html){
+  const m = document.getElementById('aiMsgs');
+  const d = document.createElement('div');
+  d.className = 'msg '+role; d.innerHTML = html;
+  m.appendChild(d); m.scrollTop = m.scrollHeight;
+}
+function renderAiChips(){
+  const el = document.getElementById('aiChips');
+  if(!el) return;
+  const chips = [t('aiChip1'),t('aiChip2'),t('aiChip3'),t('aiChip4')];
+  el.innerHTML = chips.map(c=>`<button class="ai-chip">${c}</button>`).join('');
+  el.querySelectorAll('.ai-chip').forEach(b=>b.onclick=()=>aiHandle(b.textContent));
+}
+function aiMatch(text){
+  const s = text.toLowerCase()
+    .replace(/\b(mo|ma)shina\w*/g,'avto')
+    .replace(/машин\w*/g,'avto')
+    .replace(/avtomobil\w*/g,'avto');
+  let best=null, max=0;
+  for(const [svc,kws] of Object.entries(AI_KW)){
+    let hits=0; kws.forEach(k=>{ if(s.includes(k)) hits++; });
+    if(hits>max){ max=hits; best=svc; }
+  }
+  return best;
+}
+function aiOpen(){
+  document.getElementById('aiPanel').classList.add('show');
+  document.getElementById('aiFab').classList.add('hide');
+  if(!aiOpened){ aiOpened=true; aiAddMsg('bot', t('aiGreeting')); }
+  setTimeout(()=>document.getElementById('aiInput').focus(), 120);
+}
+function aiCloseFn(){
+  document.getElementById('aiPanel').classList.remove('show');
+  document.getElementById('aiFab').classList.remove('hide');
+}
+function aiHandle(text){
+  text=(text||'').trim(); if(!text) return;
+  document.getElementById('aiInput').value='';
+  aiAddMsg('user', escapeHtml(text));
+  const svc = aiMatch(text);
+  if(!svc){ setTimeout(()=>aiAddMsg('bot', t('aiNoMatch')), 260); return; }
+  state.service = svc; renderServices(); renderList();
+  const rows = getFiltered();
+  const svcN = svcName(svc);
+  let head;
+  if(rows.length === 0){
+    head = state.lang==='ru'
+      ? `Вам нужна услуга <b>${svcN}</b>, но поблизости пока нет мастеров. Попробуйте другой регион.`
+      : `Sizga <b>${svcN}</b> xizmati kerak, lekin yaqin atrofda usta topilmadi. Boshqa hududni tanlab ko'ring.`;
+  } else {
+    head = state.lang==='ru'
+      ? `Вам нужна услуга <b>${svcN}</b>. Рядом найдено ${rows.length} — список обновлён. Ближайшие:`
+      : `Sizga <b>${svcN}</b> xizmati kerak. Yaqin atrofda ${rows.length} ta topildi — ro'yxat yangilandi. Eng yaqinlari:`;
+    head += `<div class="rec">` + rows.slice(0,2).map(p=>{
+      const d = fmtDist(p.dist);
+      return `<div class="rec-item"><div><div class="ri-name">${p.name}</div><div class="ri-dist">${d.n} ${d.u} · ${subDisp(p.region,p.sub)}</div></div><a class="rec-call" href="tel:${p.phone}">${t('call')}</a></div>`;
+    }).join('') + `</div>`;
+  }
+  setTimeout(()=>aiAddMsg('bot', head), 320);
+}
+document.getElementById('aiFab').onclick = aiOpen;
+document.getElementById('aiClose').onclick = aiCloseFn;
+document.getElementById('aiSend').onclick = () => aiHandle(document.getElementById('aiInput').value);
+document.getElementById('aiInput').addEventListener('keydown', e=>{ if(e.key==='Enter') aiHandle(document.getElementById('aiInput').value); });
+
+/* ---------------- Render all ---------------- */
+function renderAll(){ renderServices(); renderList(); }
+
+/* ---------------- Init ---------------- */
+populateSelects();
+applyI18n();
+updateLocLabel();
+renderAll();
+setTimeout(detectLocation, 600);
+
+/* ==== Avto bozor (sotuvdagi mashinalar) ==== */
+Object.assign(T.uz,{modeYordam:"Avto yordam",modeBozor:"Avto bozor",mktTitle:"Sotuvdagi avtomobillar",mktCount:"ta e'lon",mktEmpty:"Hozircha e'lon yo'q",mktCall:"Bog'lanish",mktYear:"yil"});
+Object.assign(T.ru,{modeYordam:"Автопомощь",modeBozor:"Автобазар",mktTitle:"Автомобили на продажу",mktCount:"объявл.",mktEmpty:"Пока нет объявлений",mktCall:"Связаться",mktYear:"г."});
+let CARS=[];
+function fmtSum(n){ n=(''+n).replace(/\D/g,''); return n.replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
+function renderMarket(){
+  const grid=document.getElementById('carGrid'), empty=document.getElementById('carEmpty');
+  document.getElementById('carCount').textContent=CARS.length;
+  if(!CARS.length){ grid.innerHTML=''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  grid.innerHTML=CARS.map(c=>{
+    const img=c.img?`<div class="ph" style="background-image:url('${escapeHtml(c.img)}')"></div>`:`<div class="ph">🚗</div>`;
+    const price=c.price?`<div class="price">${fmtSum(c.price)} so'm</div>`:'';
+    const yr=c.year?`<div class="yr">${escapeHtml(''+c.year)} ${t('mktYear')}</div>`:'';
+    const desc=`<div class="desc">${escapeHtml(c.desc||'')}</div>`;
+    const call=c.phone?`<a class="call" href="tel:${escapeHtml(c.phone)}">${t('mktCall')}</a>`:'';
+    return `<div class="car">${img}<div class="body"><div class="ttl">${escapeHtml(c.name||'')}</div>${yr}${price}${desc}${call}</div></div>`;
+  }).join('');
+}
+function loadCars(){
+  fetch('cars.json?_='+Date.now()).then(r=>r.ok?r.json():[]).then(d=>{CARS=Array.isArray(d)?d:[];renderMarket();}).catch(()=>{CARS=[];renderMarket();});
+}
+function setMode(m){
+  document.querySelectorAll('#modeBar .mode').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  const bozor=(m==='bozor');
+  const ctl=document.querySelector('.controls'), pg=document.querySelector('.page'), ab=document.getElementById('addBtn');
+  if(ctl) ctl.style.display=bozor?'none':'';
+  if(pg) pg.style.display=bozor?'none':'';
+  if(ab) ab.style.display=bozor?'none':'';
+  document.getElementById('market').classList.toggle('hidden',!bozor);
+}
+document.querySelectorAll('#modeBar .mode').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+document.querySelectorAll('#langSeg button').forEach(b=>b.addEventListener('click',()=>setTimeout(renderMarket,0)));
+Object.assign(T.uz,{}); applyI18n();
+loadCars();
+</script>
+</body>
+</html>
