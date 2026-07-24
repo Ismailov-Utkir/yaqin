@@ -1,6 +1,3 @@
-admin_server.py
-ADMIN.bat
-admin.html
 admin-config.*
 __pycache__/
 *.pyc
