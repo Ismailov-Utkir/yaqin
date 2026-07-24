@@ -272,6 +272,15 @@
 .car .call{margin-top:6px;text-align:center;padding:10px;border-radius:10px;background:#2563EB;color:#fff;font-weight:700;text-decoration:none;font-size:14px}
 .market-empty{text-align:center;padding:60px 20px;color:var(--muted,#8a93a0);font-size:15px}
 .market-empty.hidden{display:none}
+/* reklama banner */
+.ad-bar{max-width:1200px;margin:14px auto 0;padding:0 16px;display:none}
+.ad-bar.show{display:block}
+.ad-bar a,.ad-bar .adimg{display:block;border-radius:14px;overflow:hidden;line-height:0;border:1px solid var(--border,#e6e9f0)}
+.ad-bar img{width:100%;max-height:170px;object-fit:cover;display:block}
+.ad-badge{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9aa4b2;padding:0 2px 5px}
+/* foydalanuvchilar hisoblagichi */
+.visitors{position:fixed;left:16px;bottom:16px;z-index:60;background:#fff;border:1px solid #e3e7ee;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;color:#1a2230;box-shadow:0 8px 22px rgba(20,30,50,.14);display:flex;align-items:center;gap:6px}
+.visitors b{color:#2563EB;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -302,6 +311,9 @@
   <button class="mode on" data-mode="yordam">🔧 <span data-i18n="modeYordam">Avto yordam</span></button>
   <button class="mode" data-mode="bozor">🚗 <span data-i18n="modeBozor">Avto bozor</span></button>
 </nav>
+
+<div class="ad-bar" id="adBar"></div>
+<div class="visitors" id="visitors" title="Umumiy foydalanuvchilar"><span>👥</span> <b id="vcount">—</b></div>
 
 <section class="market hidden" id="market">
   <div class="market-head">
@@ -1477,7 +1489,7 @@ function renderMarket(){
   empty.classList.add('hidden');
   grid.innerHTML=CARS.map(c=>{
     const img=c.img?`<div class="ph" style="background-image:url('${escapeHtml(c.img)}')"></div>`:`<div class="ph">🚗</div>`;
-    const price=c.price?`<div class="price">${fmtSum(c.price)} so'm</div>`:'';
+    const price=c.price?`<div class="price">${c.currency==='usd'?('$ '+fmtSum(c.price)):(fmtSum(c.price)+" so'm")}</div>`:'';
     const yr=c.year?`<div class="yr">${escapeHtml(''+c.year)} ${t('mktYear')}</div>`:'';
     const desc=`<div class="desc">${escapeHtml(c.desc||'')}</div>`;
     const call=c.phone?`<a class="call" href="tel:${escapeHtml(c.phone)}">${t('mktCall')}</a>`:'';
@@ -1497,9 +1509,40 @@ function setMode(m){
   document.getElementById('market').classList.toggle('hidden',!bozor);
 }
 document.querySelectorAll('#modeBar .mode').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
-document.querySelectorAll('#langSeg button').forEach(b=>b.addEventListener('click',()=>setTimeout(renderMarket,0)));
+document.querySelectorAll('#langSeg button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{renderMarket();renderAds();},0)));
+
+/* ---- Reklama banner ---- */
+Object.assign(T.uz,{adLabel:"Reklama"}); Object.assign(T.ru,{adLabel:"Реклама"});
+let ADS=[], adTimer=null, adIx=0;
+function renderAds(){
+  const bar=document.getElementById('adBar');
+  if(!ADS.length){ bar.classList.remove('show'); bar.innerHTML=''; if(adTimer)clearInterval(adTimer); return; }
+  bar.classList.add('show');
+  function draw(){
+    const a=ADS[adIx%ADS.length];
+    const img=`<img src="${escapeHtml(a.img||'')}" alt="reklama">`;
+    const inner=a.link?`<a href="${escapeHtml(a.link)}" target="_blank" rel="noopener">${img}</a>`:`<div class="adimg">${img}</div>`;
+    bar.innerHTML=`<div class="ad-badge">${t('adLabel')}</div>${inner}`;
+  }
+  draw();
+  if(adTimer)clearInterval(adTimer);
+  if(ADS.length>1){ adTimer=setInterval(()=>{adIx++;draw();},5000); }
+}
+function loadAds(){ fetch('ads.json?_='+Date.now()).then(r=>r.ok?r.json():[]).then(d=>{ADS=Array.isArray(d)?d:[];renderAds();}).catch(()=>{}); }
+
+/* ---- Foydalanuvchilar hisoblagichi ---- */
+function initVisitors(){
+  const el=document.getElementById('vcount');
+  const NS='yaqin_ismailov', KEY='foydalanuvchilar';
+  const counted=sessionStorage.getItem('yaqin_counted');
+  const url='https://api.counterapi.dev/v1/'+NS+'/'+KEY+(counted?'/':'/up');
+  fetch(url).then(r=>r.json()).then(d=>{ if(d&&typeof d.count!=='undefined'){ el.textContent=Number(d.count).toLocaleString('ru-RU'); sessionStorage.setItem('yaqin_counted','1'); } }).catch(()=>{ el.textContent='—'; });
+}
+
 Object.assign(T.uz,{}); applyI18n();
 loadCars();
+loadAds();
+initVisitors();
 </script>
 </body>
 </html>
