@@ -285,7 +285,9 @@
 .svc .ic{width:34px;height:34px;color:var(--blue);background:var(--blue-soft);border-radius:11px;padding:6px}
 .svc.active{background:var(--blue);border-color:var(--blue);color:#fff}
 .svc.active .ic{color:#fff;background:rgba(255,255,255,.2)}
-.svc .ic.emo{width:46px;height:46px;padding:0;display:grid;place-items:center;font-size:25px;line-height:1;border-radius:13px}
+.svc .ic.img{width:54px;height:54px;padding:7px;display:grid;place-items:center;border-radius:15px}
+.svc .ic.img img{width:100%;height:100%;object-fit:contain;display:block}
+.svc.active .ic.img{background:rgba(255,255,255,.9)}
 </style>
 </head>
 <body>
@@ -892,6 +894,8 @@
 
 <div class="toast" id="toast"></div>
 
+<div style="text-align:center;padding:14px 16px 22px;font-size:11px;color:var(--slate)">Ikonkalar: <a href="https://icons8.com" target="_blank" rel="noopener" style="color:var(--slate);text-decoration:underline">Icons8</a></div>
+
 <script>
 window.addEventListener('error', function(ev){
   var b = document.getElementById('errBanner');
@@ -1153,8 +1157,8 @@ function getFiltered(){
 function renderServices(){
   const el = document.getElementById('services');
   el.innerHTML = SERVICES.map(s =>{
-    const e = SVCEMO[s.id] || ['🔧','#EEF2FF'];
-    return `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic emo" style="background:${e[1]}">${e[0]}</span>${svcName(s.id)}</button>`;}).join('');
+    const bg = (SVCEMO[s.id] || ['','#EEF2FF'])[1];
+    return `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic img" style="background:${bg}"><img src="svc/${s.id}.png" alt="" loading="lazy"></span>${svcName(s.id)}</button>`;}).join('');
   el.querySelectorAll('.svc').forEach(b => b.onclick = () => { state.service = b.dataset.svc; renderAll(); });
 }
 
