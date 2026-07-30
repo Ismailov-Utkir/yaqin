@@ -251,27 +251,6 @@
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <style>
-/* ==== Avto bozor (sotuvdagi mashinalar) ==== */
-.mode-bar{display:flex;gap:8px;justify-content:center;padding:14px 16px 0;max-width:1200px;margin:0 auto}
-.mode-bar .mode{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:999px;border:1px solid var(--border,#e3e7ee);background:var(--surface,#fff);color:var(--text,#1a2230);font-weight:700;font-size:14px;cursor:pointer;transition:.18s;font-family:inherit}
-.mode-bar .mode.on{background:#2563EB;border-color:#2563EB;color:#fff;box-shadow:0 6px 18px rgba(37,99,235,.28)}
-.market{max-width:1200px;margin:0 auto;padding:18px 16px 60px}
-.market.hidden{display:none}
-.market-head{margin-bottom:16px}
-.market-head h1{font-size:22px;font-weight:800}
-.market-head .sub{color:var(--muted,#6b7480);font-size:13px;margin-top:2px}
-.car-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-.car{background:var(--surface,#fff);border:1px solid var(--border,#e6e9f0);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:.18s}
-.car:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(20,30,50,.12)}
-.car .ph{aspect-ratio:4/3;background:#eef1f6 center/cover no-repeat;display:grid;place-items:center;color:#9aa4b2;font-size:34px}
-.car .body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
-.car .ttl{font-weight:800;font-size:16px;line-height:1.2}
-.car .price{color:#2563EB;font-weight:800;font-size:17px}
-.car .yr{font-size:12px;color:var(--muted,#6b7480)}
-.car .desc{font-size:13px;color:var(--muted,#59616e);line-height:1.35;flex:1;white-space:pre-line}
-.car .call{margin-top:6px;text-align:center;padding:10px;border-radius:10px;background:#2563EB;color:#fff;font-weight:700;text-decoration:none;font-size:14px}
-.market-empty{text-align:center;padding:60px 20px;color:var(--muted,#8a93a0);font-size:15px}
-.market-empty.hidden{display:none}
 /* reklama banner */
 .ad-bar{max-width:1200px;margin:14px auto 0;padding:0 16px;display:none}
 .ad-bar.show{display:block}
@@ -307,21 +286,7 @@
   </button>
 </header>
 
-<nav class="mode-bar" id="modeBar">
-  <button class="mode on" data-mode="yordam">🔧 <span data-i18n="modeYordam">Avto yordam</span></button>
-  <button class="mode" data-mode="bozor">🚗 <span data-i18n="modeBozor">Avto bozor</span></button>
-</nav>
-
 <div class="ad-bar" id="adBar"></div>
-
-<section class="market hidden" id="market">
-  <div class="market-head">
-    <h1 data-i18n="mktTitle">Sotuvdagi avtomobillar</h1>
-    <div class="sub"><span id="carCount">0</span> <span data-i18n="mktCount">ta e'lon</span></div>
-  </div>
-  <div class="car-grid" id="carGrid"></div>
-  <div class="market-empty hidden" id="carEmpty" data-i18n="mktEmpty">Hozircha e'lon yo'q</div>
-</section>
 
 <section class="controls">
   <div class="ctl-label" data-i18n="svcTypeLabel">Xizmat turi</div>
@@ -1476,39 +1441,8 @@ updateLocLabel();
 renderAll();
 setTimeout(detectLocation, 600);
 
-/* ==== Avto bozor (sotuvdagi mashinalar) ==== */
-Object.assign(T.uz,{modeYordam:"Avto yordam",modeBozor:"Avto bozor",mktTitle:"Sotuvdagi avtomobillar",mktCount:"ta e'lon",mktEmpty:"Hozircha e'lon yo'q",mktCall:"Bog'lanish",mktYear:"yil"});
-Object.assign(T.ru,{modeYordam:"Автопомощь",modeBozor:"Автобазар",mktTitle:"Автомобили на продажу",mktCount:"объявл.",mktEmpty:"Пока нет объявлений",mktCall:"Связаться",mktYear:"г."});
-let CARS=[];
-function fmtSum(n){ n=(''+n).replace(/\D/g,''); return n.replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
-function renderMarket(){
-  const grid=document.getElementById('carGrid'), empty=document.getElementById('carEmpty');
-  document.getElementById('carCount').textContent=CARS.length;
-  if(!CARS.length){ grid.innerHTML=''; empty.classList.remove('hidden'); return; }
-  empty.classList.add('hidden');
-  grid.innerHTML=CARS.map(c=>{
-    const img=c.img?`<div class="ph" style="background-image:url('${escapeHtml(c.img)}')"></div>`:`<div class="ph">🚗</div>`;
-    const price=c.price?`<div class="price">${c.currency==='usd'?('$ '+fmtSum(c.price)):(fmtSum(c.price)+" so'm")}</div>`:'';
-    const yr=c.year?`<div class="yr">${escapeHtml(''+c.year)} ${t('mktYear')}</div>`:'';
-    const desc=`<div class="desc">${escapeHtml(c.desc||'')}</div>`;
-    const call=c.phone?`<a class="call" href="tel:${escapeHtml(c.phone)}">${t('mktCall')}</a>`:'';
-    return `<div class="car">${img}<div class="body"><div class="ttl">${escapeHtml(c.name||'')}</div>${yr}${price}${desc}${call}</div></div>`;
-  }).join('');
-}
-function loadCars(){
-  fetch('cars.json?_='+Date.now()).then(r=>r.ok?r.json():[]).then(d=>{CARS=Array.isArray(d)?d:[];renderMarket();}).catch(()=>{CARS=[];renderMarket();});
-}
-function setMode(m){
-  document.querySelectorAll('#modeBar .mode').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
-  const bozor=(m==='bozor');
-  const ctl=document.querySelector('.controls'), pg=document.querySelector('.page'), ab=document.getElementById('addBtn');
-  if(ctl) ctl.style.display=bozor?'none':'';
-  if(pg) pg.style.display=bozor?'none':'';
-  if(ab) ab.style.display=bozor?'none':'';
-  document.getElementById('market').classList.toggle('hidden',!bozor);
-}
-document.querySelectorAll('#modeBar .mode').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
-document.querySelectorAll('#langSeg button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{renderMarket();renderAds();},0)));
+/* ---- Til almashganda reklamani yangilash ---- */
+document.querySelectorAll('#langSeg button').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{renderAds();},0)));
 
 /* ---- Reklama banner ---- */
 Object.assign(T.uz,{adLabel:"Reklama"}); Object.assign(T.ru,{adLabel:"Реклама"});
@@ -1541,7 +1475,6 @@ function trackVisit(){
 }
 
 Object.assign(T.uz,{}); applyI18n();
-loadCars();
 loadAds();
 trackVisit();
 </script>
