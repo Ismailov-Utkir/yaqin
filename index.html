@@ -1550,19 +1550,14 @@ applyI18n();
 loadAds();
 trackVisit();
 
-/* ===== Girih (islimiy) fon naqshi — marifatli mahalladagidek ===== */
+/* ===== Fon naqshi — marifatli mahalladagi AYNAN o'sha naqsh (romb + kvadrat) ===== */
 (function(){
-  const T=64,cx=32,cy=32,R=26,r=11,d=9;
-  let star="M";
-  for(let k=0;k<16;k++){const a=-Math.PI/2+k*Math.PI/8,rad=(k%2===0)?R:r,x=(cx+rad*Math.cos(a)).toFixed(1),y=(cy+rad*Math.sin(a)).toFixed(1);star+=(k?"L":"")+x+" "+y+" ";}
-  star+="Z";
-  const dia=(x,y)=>"M"+x+" "+(y-d)+"L"+(x+d)+" "+y+"L"+x+" "+(y+d)+"L"+(x-d)+" "+y+"Z";
-  const corners=dia(0,0)+dia(T,0)+dia(0,T)+dia(T,T);
-  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+T+'" height="'+T+'">'
-    +'<path d="'+star+'" fill="none" stroke="#2563EB" stroke-opacity="0.08" stroke-width="1.1"/>'
-    +'<path d="'+corners+'" fill="none" stroke="#2563EB" stroke-opacity="0.08" stroke-width="1.1"/></svg>';
+  const st='#2563EB', op='0.11', sw='1.1';
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46">'
+    +'<path d="M23 4L42 23 23 42 4 23Z" fill="none" stroke="'+st+'" stroke-opacity="'+op+'" stroke-width="'+sw+'"/>'
+    +'<rect x="10" y="10" width="26" height="26" fill="none" stroke="'+st+'" stroke-opacity="'+op+'" stroke-width="'+sw+'"/></svg>';
   document.body.style.backgroundImage='url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
-  document.body.style.backgroundSize=T+'px '+T+'px';
+  document.body.style.backgroundSize='46px 46px';
   document.body.style.backgroundAttachment='fixed';
 })();
 
