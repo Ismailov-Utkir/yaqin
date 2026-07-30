@@ -289,6 +289,28 @@
 .svc .ic.img{width:54px;height:54px;padding:7px;display:grid;place-items:center;border-radius:15px}
 .svc .ic.img img{width:100%;height:100%;object-fit:contain;display:block}
 .svc.active .ic.img{background:rgba(255,255,255,.9)}
+
+/* ===== Maxsus (dizaynli) hudud tanlash ===== */
+.cs-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-width:200px;background:var(--surface);border:1.5px solid var(--line);padding:10px 13px;border-radius:11px;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;font-family:inherit}
+.cs-trigger:hover{border-color:var(--line-strong)}
+.cs-trigger .cs-val{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs-trigger svg{color:var(--slate);flex-shrink:0}
+.cs-ov{position:fixed;inset:0;z-index:1000;background:rgba(16,33,63,.45);display:none;align-items:flex-end;justify-content:center}
+.cs-ov.open{display:flex;animation:csf .2s ease}
+@keyframes csf{from{opacity:0}to{opacity:1}}
+.cs-sheet{background:var(--surface);width:100%;max-width:520px;border-radius:22px 22px 0 0;max-height:78vh;display:flex;flex-direction:column;box-shadow:0 -10px 44px rgba(16,33,63,.28);animation:css .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes css{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(min-width:560px){.cs-ov{align-items:center}.cs-sheet{border-radius:20px;animation:csp .18s ease}}
+@keyframes csp{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.cs-head{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid var(--line)}
+.cs-title{font-weight:700;font-size:15px;color:var(--ink)}
+.cs-x{width:32px;height:32px;border-radius:9px;background:var(--paper);color:var(--slate);font-size:15px;cursor:pointer}
+.cs-list{overflow-y:auto;padding:8px;-webkit-overflow-scrolling:touch}
+.cs-item{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;padding:14px 15px;border-radius:12px;font-size:15px;color:var(--ink);font-weight:500;cursor:pointer;font-family:inherit;background:none;border:none}
+.cs-item:active,.cs-item:hover{background:var(--paper)}
+.cs-item.sel{background:var(--blue-soft);color:var(--navy);font-weight:700}
+.cs-ck{opacity:0;color:var(--blue);font-weight:800;font-size:16px}
+.cs-item.sel .cs-ck{opacity:1}
 </style>
 </head>
 <body>
@@ -1527,6 +1549,47 @@ Object.assign(T.ru,{heroTitle:"Нужна помощь на дороге? 24/7",
 applyI18n();
 loadAds();
 trackVisit();
+
+/* ===== Maxsus dizaynli select (telefonda ham chiroyli) ===== */
+(function(){
+  const ov=document.createElement('div'); ov.className='cs-ov';
+  ov.innerHTML='<div class="cs-sheet"><div class="cs-head"><span class="cs-title"></span><button class="cs-x" type="button">✕</button></div><div class="cs-list"></div></div>';
+  document.body.appendChild(ov);
+  const listEl=ov.querySelector('.cs-list'), titleEl=ov.querySelector('.cs-title');
+  function close(){ ov.classList.remove('open'); }
+  ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
+  ov.querySelector('.cs-x').onclick=close;
+  function open(select){
+    const fld=select.closest('.field');
+    titleEl.textContent=(fld&&fld.querySelector('label'))?fld.querySelector('label').textContent:'Tanlang';
+    listEl.innerHTML=Array.from(select.options).map((o,i)=>
+      `<button class="cs-item ${i===select.selectedIndex?'sel':''}" type="button" data-i="${i}"><span>${o.text}</span><span class="cs-ck">✓</span></button>`).join('');
+    listEl.querySelectorAll('.cs-item').forEach(b=>b.onclick=()=>{
+      select.selectedIndex=+b.dataset.i;
+      select.dispatchEvent(new Event('change',{bubbles:true}));
+      close();
+    });
+    ov.classList.add('open');
+    const s=listEl.querySelector('.cs-item.sel'); if(s) s.scrollIntoView({block:'center'});
+  }
+  function enhance(select){
+    if(!select||select._cs) return; select._cs=true;
+    select.style.display='none';
+    const chev=select.parentNode&&select.parentNode.querySelector(':scope > svg'); if(chev) chev.style.display='none';
+    const trg=document.createElement('button'); trg.type='button'; trg.className='cs-trigger';
+    trg.innerHTML='<span class="cs-val"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    select.parentNode.insertBefore(trg, select.nextSibling);
+    const sync=()=>{ const o=select.options[select.selectedIndex]; trg.querySelector('.cs-val').textContent=o?o.text:''; };
+    trg.onclick=()=>open(select);
+    select.addEventListener('change',sync);
+    select._csSync=sync; sync();
+  }
+  enhance(document.getElementById('regionSel'));
+  enhance(document.getElementById('subSel'));
+  // renderAll'dan keyin barcha yorliqlarni yangilash (til/reset o'zgarganda)
+  const _ra=renderAll;
+  renderAll=function(){ _ra(); document.querySelectorAll('.sel').forEach(s=>{ if(s._csSync) s._csSync(); }); };
+})();
 </script>
 </body>
 </html>
