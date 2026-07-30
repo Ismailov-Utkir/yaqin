@@ -285,6 +285,7 @@
 .svc .ic{width:34px;height:34px;color:var(--blue);background:var(--blue-soft);border-radius:11px;padding:6px}
 .svc.active{background:var(--blue);border-color:var(--blue);color:#fff}
 .svc.active .ic{color:#fff;background:rgba(255,255,255,.2)}
+.svc .ic.emo{width:46px;height:46px;padding:0;display:grid;place-items:center;font-size:25px;line-height:1;border-radius:13px}
 </style>
 </head>
 <body>
@@ -1022,6 +1023,11 @@ const SERVICES = [
   {id:'zapchast', nameUz:'Ehtiyot qismlar', nameRu:'Автозапчасти', icon:'part'},
 ];
 const SVC = Object.fromEntries(SERVICES.map(s=>[s.id,s]));
+const SVCEMO = {
+  hammasi:['🧰','#EEF2FF'], evakuator:['🛻','#FEF3C7'], vulkanizatsiya:['🛞','#E0F2FE'],
+  elektrik:['⚡','#FEF9C3'], yoqilgi:['⛽','#FEE2E2'], moy:['🛢️','#F3E8FF'],
+  xodovoy:['🔧','#E0E7FF'], yuk:['🚛','#DBEAFE'], avtomoyka:['🧼','#CCFBF1'], zapchast:['⚙️','#F1F5F9'],
+};
 
 const PROVIDERS = [
   {id:1, name:'Tez Yordam Evakuator', services:['evakuator'], region:'toshkent_shahri', sub:'yakkasaroy', lat:41.291, lng:69.266, price:120000, rating:4.9, reviews:213, open:'24', verified:true, phone:'+998901234501'},
@@ -1146,8 +1152,9 @@ function getFiltered(){
 /* ---------------- Render: services ---------------- */
 function renderServices(){
   const el = document.getElementById('services');
-  el.innerHTML = SERVICES.map(s =>
-    `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic">${icon(s.icon)}</span>${svcName(s.id)}</button>`).join('');
+  el.innerHTML = SERVICES.map(s =>{
+    const e = SVCEMO[s.id] || ['🔧','#EEF2FF'];
+    return `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic emo" style="background:${e[1]}">${e[0]}</span>${svcName(s.id)}</button>`;}).join('');
   el.querySelectorAll('.svc').forEach(b => b.onclick = () => { state.service = b.dataset.svc; renderAll(); });
 }
 
