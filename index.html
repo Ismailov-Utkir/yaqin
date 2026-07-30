@@ -1288,7 +1288,9 @@ function fillRegionOptions(sel, includeAll){
 function fillSubOptions(sel, region, includeAll){
   const cur = sel.value;
   sel.innerHTML = (includeAll?`<option value="all">${t('allSubs')}</option>`:'') +
-    Object.keys(REGIONS[region].subs).map(k=>`<option value="${k}">${subDisp(region,k)}</option>`).join('');
+    Object.keys(REGIONS[region].subs)
+      .sort((a,b)=>subDisp(region,a).localeCompare(subDisp(region,b),'uz'))
+      .map(k=>`<option value="${k}">${subDisp(region,k)}</option>`).join('');
   if(cur) sel.value = cur;
 }
 
