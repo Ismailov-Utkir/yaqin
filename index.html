@@ -1426,16 +1426,42 @@ document.getElementById('fSubmit').onclick = () => {
 
 /* ---------------- AI assistant ---------------- */
 const AI_KW = {
-  vulkanizatsiya:["gildirak","g'ildirak","shina","teshil","ballon","balon","prokol","koles","disk","pokrishk","ballonim","шина","колес","прокол","спустил","баллон","диск","покрышк","резин"],
-  evakuator:["yurmay","yurmadi","avariya","halokat","evakua","dtp","olib ket","tortib ket","tortib bor","qamalib","ag'dar","urib ket","эвакуа","авари","дтп","тащ","букс","отвез","врезал","перевернул","yo'lda qol"],
-  elektrik:["elektr","provodka","provod","generator","starter","signalizatsiya","fara","konditsioner","akkum","akum","o'tirib qol","o't olma","ot olma","o'chib qol","zavod olma","quvvatsiz","электр","провод","генератор","стартер","сигнализ","фара","кондицион","аккум","сел ","замыкан","прикур","не завод","не заводит"],
-  yoqilgi:["benzin","yoqilg","dizel","solyar","yonilg","топлив","бензин","дизел","заправ","кончил","солярк","заканч"],
-  moy:["moy alma","moy alm","moyni alma","motor moy","moy quy","moyi alm","filtr","масло","масл","фильтр","замена масла","zamena masla"],
-  xodovoy:["xodovoy","osma","amortizator","sharnir","saylentblok","rul uch","taqilla","g'ijirla","tovush chiq","tebran","ходов","амортизатор","подвеск","стук","рычаг","шаров","рулев","сайлент","скрип","гремит"],
-  yuk:["yuk avto","yuk mashina","fura","gruzovik","kamaz","isuzu","газель","грузов","фура","камаз"],
-  avtomoyka:["yuvish","yuvib","yuvdir","iflos","kir bo","kirlan","moyka","tozala","мойка","помыть","мыть","грязн","чистк","помой","химчистк"],
-  zapchast:["zapchast","ehtiyot qism","detal","zapask","kolodka","запчаст","детал","sotib ol","купить","запаск","приобрест","kerak qism","колодк"],
+  vulkanizatsiya:["gildirak","g'ildirak","shina","teshil","ballon","balon","prokol","koles","disk","pokrishk","ballonim","shinam","g'ildiragim","havosi ket","havo ket","zapaska","yamash","шина","колес","прокол","спустил","баллон","диск","покрышк","резин","подкач","бортиров"],
+  evakuator:["yurmay","yurmadi","yura olma","qimirlamay","o'chib qol","o'chib ket","avariya","halokat","evakua","dtp","olib ket","tortib ket","tortib bor","qamalib","ag'dar","urib ket","yo'lda qol","yo'lda qoldim","tashlab ket","эвакуа","авари","дтп","тащ","букс","отвез","врезал","перевернул","заглох","не едет","застрял"],
+  elektrik:["elektr","provodka","provod","generator","starter","signalizatsiya","fara","chiroq yonm","far yonm","konditsioner","akkum","akum","akkumulyator","o'tirib qol","o't olma","ot olma","o'chib qol","zavod olma","quvvatsiz","dvornik","start olmay","o't olmay","электр","провод","генератор","стартер","сигнализ","фара","кондицион","аккум","сел ","замыкан","прикур","не завод","не заводит","дворник"],
+  yoqilgi:["benzin","yoqilg","dizel","solyar","yonilg","gaz tuga","metan","propan","benzin tuga","yoqilg'i tuga","zapravka","топлив","бензин","дизел","заправ","кончил","солярк","заканч","газ конч","метан"],
+  moy:["moy alma","moy alm","moyni alma","motor moy","moy quy","moyi alm","moy ket","moy kam","antifriz","tosol","filtr alma","filtr","масло","масл","фильтр","замена масла","zamena masla","антифриз","тосол"],
+  xodovoy:["xodovoy","osma","amortizator","sharnir","saylentblok","rul uch","rul og'ir","taqilla","g'ijirla","g'ijirlay","tovush chiq","tebran","razval","shoxobcha","g'ildirak qiyshiq","stuk","ходов","амортизатор","подвеск","стук","рычаг","шаров","рулев","сайлент","скрип","гремит","развал"],
+  yuk:["yuk avto","yuk mashina","fura","gruzovik","kamaz","isuzu","gazel","tirkama","газель","грузов","фура","камаз","прицеп"],
+  avtomoyka:["yuvish","yuvib","yuvdir","iflos","kir bo","kirlan","moyka","tozala","salon tozala","ximchistk","мойка","помыть","мыть","грязн","чистк","помой","химчистк"],
+  zapchast:["zapchast","ehtiyot qism","detal","zapask","kolodka","filtr sotib","запчаст","детал","sotib ol","купить","запаск","приобрест","kerak qism","колодк"],
 };
+const AI_HINTS = [
+  {kw:["porshin","поршень","porshen","dvigatel","двигател","dvigatil","motor ","мотор","klapan","клапан","kompressiya","компресси","kolenval","коленвал","tirsakli val","gbs","gbc","porshenim","dvigatelim","motorim","kapremont","kapital remont","motor stuk","dvigatel ishlamay","tutamoqda","tutun chiq","дым","stuk dvigatel","porshinim","porshini"],
+   svc:"evakuator",
+   uz:"Bu <b>dvigatel (motor)</b> muammosiga o'xshaydi — jiddiy ta'mir talab qilishi mumkin. Mashina yurmasa yoki tutun chiqsa, uni ustaxonaga olib borish uchun <b>evakuator</b> eng to'g'ri yechim. Yaqin evakuatorlar:",
+   ru:"Похоже на проблему с <b>двигателем</b> — возможно, нужен серьёзный ремонт. Если машина не едет или идёт дым, лучше вызвать <b>эвакуатор</b> и доставить её в сервис. Ближайшие:"},
+  {kw:["korobka","коробка","transmissiya","трансмисси","peredacha","передач","akpp","mkpp","stsepleniye","сцеплен","stseplenie","peredacha tushmay","tezlik tushmay"],
+   svc:"evakuator",
+   uz:"Bu <b>uzatmalar qutisi (korobka)</b> muammosi bo'lishi mumkin. Mashina harakatlanmasa, avval <b>evakuator</b> chaqiring, keyin ustaxonada ko'rsating:",
+   ru:"Возможно, проблема с <b>коробкой передач</b>. Если машина не двигается, сначала вызовите <b>эвакуатор</b>, затем покажите мастеру:"},
+  {kw:["tormoz","тормоз","tormoz ushlamay","tormoz yo'q","to'xtamay","педаль тормоз"],
+   svc:"xodovoy",
+   uz:"Bu <b>tormoz</b> muammosi — xavfsizlik uchun tezda ta'mirlang. Xodovoy va tormoz ustalari:",
+   ru:"Это проблема с <b>тормозами</b> — почините срочно ради безопасности. Мастера по ходовой и тормозам:"},
+  {kw:["qizib ket","qizib ketdi","peregrev","перегрев","radiator","радиатор","tosol qayna","harorat ko'tar","dvigatel qizi"],
+   svc:"evakuator",
+   uz:"Dvigatel <b>qizib ketgan</b> bo'lishi mumkin — yurishni davom ettirmang! Soviguncha to'xtang, kerak bo'lsa <b>evakuator</b> chaqiring:",
+   ru:"Возможно, двигатель <b>перегрелся</b> — не продолжайте движение! Остановитесь, при необходимости вызовите <b>эвакуатор</b>:"},
+];
+function aiAnalyze(text){
+  const s = text.toLowerCase().replace(/\b(mo|ma)shina\w*/g,'avto').replace(/машин\w*/g,'avto').replace(/avtomobil\w*/g,'avto');
+  for(const h of AI_HINTS){ if(h.kw.some(k=>s.includes(k))) return {svc:h.svc, msg:h}; }
+  const svc = aiMatch(text);
+  return svc ? {svc:svc, msg:null} : null;
+}
+Object.assign(T.uz,{aiNoMatch:"Tushunmadim 🤔. Muammoni sodda yozing — masalan: «g'ildiragim teshildi», «dvigatel ishlamayapti», «akkumulyator o'tirdi», «tormoz ushlamayapti». Yoki tepadagi xizmat turlaridan tanlang."});
+Object.assign(T.ru,{aiNoMatch:"Не понял 🤔. Опишите проще — например: «пробил колесо», «двигатель не работает», «сел аккумулятор», «не держат тормоза». Или выберите тип услуги выше."});
 let aiOpened = false;
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function aiAddMsg(role, html){
@@ -1477,20 +1503,26 @@ function aiHandle(text){
   text=(text||'').trim(); if(!text) return;
   document.getElementById('aiInput').value='';
   aiAddMsg('user', escapeHtml(text));
-  const svc = aiMatch(text);
-  if(!svc){ setTimeout(()=>aiAddMsg('bot', t('aiNoMatch')), 260); return; }
+  const res = aiAnalyze(text);
+  if(!res){ setTimeout(()=>aiAddMsg('bot', t('aiNoMatch')), 260); return; }
+  const svc = res.svc;
   state.service = svc; renderServices(); renderList();
   const rows = getFiltered();
   const svcN = svcName(svc);
+  const hintMsg = res.msg ? res.msg[state.lang==='ru'?'ru':'uz'] : null;
   let head;
   if(rows.length === 0){
-    head = state.lang==='ru'
-      ? `Вам нужна услуга <b>${svcN}</b>, но поблизости пока нет мастеров. Попробуйте другой регион.`
-      : `Sizga <b>${svcN}</b> xizmati kerak, lekin yaqin atrofda usta topilmadi. Boshqa hududni tanlab ko'ring.`;
+    head = hintMsg
+      ? hintMsg.replace(/:$/,'') + (state.lang==='ru'?' Но поблизости пока нет мастеров — попробуйте другой регион.':' Lekin yaqin atrofda usta topilmadi — boshqa hududni tanlang.')
+      : (state.lang==='ru'
+        ? `Вам нужна услуга <b>${svcN}</b>, но поблизости пока нет мастеров. Попробуйте другой регион.`
+        : `Sizga <b>${svcN}</b> xizmati kerak, lekin yaqin atrofda usta topilmadi. Boshqa hududni tanlab ko'ring.`);
   } else {
-    head = state.lang==='ru'
-      ? `Вам нужна услуга <b>${svcN}</b>. Рядом найдено ${rows.length} — список обновлён. Ближайшие:`
-      : `Sizga <b>${svcN}</b> xizmati kerak. Yaqin atrofda ${rows.length} ta topildi — ro'yxat yangilandi. Eng yaqinlari:`;
+    head = hintMsg
+      ? hintMsg
+      : (state.lang==='ru'
+        ? `Вам нужна услуга <b>${svcN}</b>. Рядом найдено ${rows.length} — список обновлён. Ближайшие:`
+        : `Sizga <b>${svcN}</b> xizmati kerak. Yaqin atrofda ${rows.length} ta topildi — ro'yxat yangilandi. Eng yaqinlari:`);
     head += `<div class="rec">` + rows.slice(0,2).map(p=>{
       const d = fmtDist(p.dist);
       return `<div class="rec-item"><div><div class="ri-name">${p.name}</div><div class="ri-dist">${d.n} ${d.u} · ${subDisp(p.region,p.sub)}</div></div><a class="rec-call" href="tel:${p.phone}">${t('call')}</a></div>`;
