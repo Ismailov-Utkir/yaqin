@@ -280,15 +280,14 @@
 .controls{padding-top:24px}
 .ctl-label{font-size:17px;font-weight:800;letter-spacing:-.01em;text-transform:none;color:var(--ink);margin:0 2px 14px}
 .services{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;overflow:visible;padding-bottom:0}
-.svc{flex-shrink:1;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:12px;padding:18px 10px 15px;border-radius:17px;min-height:124px;font-size:13.5px;font-weight:700;color:var(--ink);white-space:normal;box-shadow:var(--shadow-sm);border:1.5px solid var(--line)}
-.svc .svc-lbl{display:flex;align-items:center;justify-content:center;min-height:2.5em;line-height:1.22;letter-spacing:-.01em}
-.svc:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-md);transition:.15s}
+.svc{flex-shrink:1;flex-direction:column;align-items:stretch;justify-content:flex-start;text-align:center;gap:0;padding:0;overflow:hidden;border-radius:16px;min-height:0;font-size:13px;font-weight:700;color:var(--ink);white-space:normal;box-shadow:var(--shadow-sm);border:1.5px solid var(--line);background:var(--surface)}
+.svc:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:var(--shadow-md);transition:.15s}
 .svc .ic{width:34px;height:34px;color:var(--blue);background:var(--blue-soft);border-radius:11px;padding:6px}
-.svc.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.svc.active .ic{color:#fff;background:rgba(255,255,255,.2)}
-.svc .ic.img{width:54px;height:54px;padding:7px;display:grid;place-items:center;border-radius:15px}
-.svc .ic.img img{width:100%;height:100%;object-fit:contain;display:block}
-.svc.active .ic.img{background:rgba(255,255,255,.9)}
+.svc .ic.img{width:100%;height:94px;padding:0;border-radius:0;display:block;background:#e8eef7}
+.svc .ic.img img{width:100%;height:100%;object-fit:cover;display:block}
+.svc .svc-lbl{display:flex;align-items:center;justify-content:center;min-height:3em;padding:9px 8px 11px;line-height:1.2;letter-spacing:-.01em}
+.svc.active{border-color:var(--blue);box-shadow:var(--shadow-md)}
+.svc.active .svc-lbl{background:var(--blue);color:#fff}
 
 /* ===== Maxsus (dizaynli) hudud tanlash ===== */
 .cs-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-width:200px;background:var(--surface);border:1.5px solid var(--line);padding:10px 13px;border-radius:11px;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;font-family:inherit}
@@ -917,7 +916,7 @@
 
 <div class="toast" id="toast"></div>
 
-<div style="text-align:center;padding:14px 16px 22px;font-size:11px;color:var(--slate)">Ikonkalar: <a href="https://icons8.com" target="_blank" rel="noopener" style="color:var(--slate);text-decoration:underline">Icons8</a></div>
+<div style="text-align:center;padding:14px 16px 22px;font-size:11px;color:var(--slate)">Rasmlar: <a href="https://openverse.org" target="_blank" rel="noopener" style="color:var(--slate);text-decoration:underline">Openverse</a> · ochiq litsenziya (CC)</div>
 
 <script>
 window.addEventListener('error', function(ev){
@@ -1179,9 +1178,8 @@ function getFiltered(){
 /* ---------------- Render: services ---------------- */
 function renderServices(){
   const el = document.getElementById('services');
-  el.innerHTML = SERVICES.map(s =>{
-    const bg = (SVCEMO[s.id] || ['','#EEF2FF'])[1];
-    return `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic img" style="background:${bg}"><img src="svc/${s.id}.png" alt="" loading="lazy"></span><span class="svc-lbl">${svcName(s.id)}</span></button>`;}).join('');
+  el.innerHTML = SERVICES.map(s =>
+    `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic img"><img src="svc/${s.id}.jpg" alt="" loading="lazy"></span><span class="svc-lbl">${svcName(s.id)}</span></button>`).join('');
   el.querySelectorAll('.svc').forEach(b => b.onclick = () => { state.service = b.dataset.svc; renderAll(); });
 }
 
