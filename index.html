@@ -1604,16 +1604,6 @@ applyI18n();
 loadAds();
 trackVisit();
 
-/* ===== Fon naqshi — marifatli mahalladagi AYNAN o'sha naqsh (romb + kvadrat) ===== */
-(function(){
-  const st='#2563EB', op='0.11', sw='1.1';
-  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46">'
-    +'<path d="M23 4L42 23 23 42 4 23Z" fill="none" stroke="'+st+'" stroke-opacity="'+op+'" stroke-width="'+sw+'"/>'
-    +'<rect x="10" y="10" width="26" height="26" fill="none" stroke="'+st+'" stroke-opacity="'+op+'" stroke-width="'+sw+'"/></svg>';
-  document.body.style.backgroundImage='url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
-  document.body.style.backgroundSize='46px 46px';
-  document.body.style.backgroundAttachment='fixed';
-})();
 
 /* ===== Maxsus dizaynli select (telefonda ham chiroyli) ===== */
 (function(){
