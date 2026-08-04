@@ -313,6 +313,16 @@
 .svc .svc-lbl{display:flex;align-items:center;justify-content:center;min-height:3em;padding:9px 8px 11px;line-height:1.2;letter-spacing:-.01em}
 .svc.active{border-color:var(--blue);box-shadow:var(--shadow-md)}
 .svc.active .svc-lbl{background:var(--blue);color:#fff}
+.svc .ic.emo2{width:100%;height:94px;display:grid;place-items:center;font-size:42px;line-height:1;background:#eef2f8}
+/* soha paneli */
+.sectorbar{max-width:1200px;margin:0 auto;padding:22px clamp(14px,4vw,40px) 0}
+.sectors{display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.sectors::-webkit-scrollbar{height:5px}
+.sectors::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:9px}
+.sector{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--line);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;color:var(--ink-soft);cursor:pointer;white-space:nowrap;transition:.14s;font-family:inherit}
+.sector:hover{border-color:var(--line-strong)}
+.sector.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:var(--shadow-md)}
+.sector .sec-emo{font-size:17px}
 
 /* ===== Maxsus (dizaynli) hudud tanlash ===== */
 .cs-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-width:200px;background:var(--surface);border:1.5px solid var(--line);padding:10px 13px;border-radius:11px;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;font-family:inherit}
@@ -369,8 +379,13 @@
 
 <div class="ad-bar" id="adBar"></div>
 
+<section class="sectorbar">
+  <div class="ctl-label" style="margin-bottom:11px" data-i18n="sectorLabel">Sohani tanlang</div>
+  <div class="sectors" id="sectors"></div>
+</section>
+
 <section class="controls">
-  <div class="ctl-label" data-i18n="svcTypeLabel">Xizmat turi</div>
+  <div class="ctl-label">Xizmat turi</div>
   <div class="services" id="services"><button class="svc active" data-svc="hammasi"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span>Barchasi</button><button class="svc " data-svc="evakuator"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V9h9l3 3h4a2 2 0 0 1 2 2v3"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle><path d="M12 9V6h5l3 4"></path></svg></span>Evakuator</button><button class="svc " data-svc="vulkanizatsiya"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3.4"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"></path></svg></span>Vulkanizatsiya</button><button class="svc " data-svc="elektrik"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8Z"></path></svg></span>Avto elektrik</button><button class="svc " data-svc="yoqilgi"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v15M3 21h13"></path><path d="M4 12h10M14 8l3 3v6.5a2 2 0 0 0 3-1.5V10l-3-3"></path></svg></span>Yoqilg'i yetkazish</button><button class="svc " data-svc="moy"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"></path></svg></span>Moy almashtirish</button><button class="svc " data-svc="xodovoy"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12M6 20h12M9 4v2l6 2-6 2 6 2-6 2 6 2v2"></path></svg></span>Xodovoy ta'miri</button><button class="svc " data-svc="yuk"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15V7a1 1 0 0 1 1-1h9v9"></path><path d="M13 10h4l3 3v2h-2"></path><path d="M11 15H9"></path><circle cx="7" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg></span>Yuk mashinalari servisi</button><button class="svc " data-svc="avtomoyka"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18h14"></path><path d="M6.5 18l1.5-4.5h8L17.5 18"></path><circle cx="8.7" cy="18" r="1.2"></circle><circle cx="15.3" cy="18" r="1.2"></circle><path d="M8 3v2.5M12 2.5v2.5M16 3v2.5"></path></svg></span>Ko'chma avtomoyka</button><button class="svc " data-svc="zapchast"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="3" width="7" height="6" rx="1.5"></rect><path d="M8.5 5.4h7M12 9v3"></path><circle cx="12" cy="16" r="3.2"></circle><circle cx="12" cy="16" r="1"></circle></svg></span>Ehtiyot qismlar</button></div>
 </section>
 
@@ -1069,6 +1084,34 @@ const SERVICES = [
   {id:'zapchast', nameUz:'Ehtiyot qismlar', nameRu:'Автозапчасти', icon:'part'},
 ];
 const SVC = Object.fromEntries(SERVICES.map(s=>[s.id,s]));
+
+/* ===== Sohalar (barcha xizmatlar) ===== */
+const SECTORS = [
+  {id:'avto', uz:'Avto xizmatlar', ru:'Автоуслуги', emoji:'🚗'},
+  {id:'saglik', uz:"Sog'liqni saqlash", ru:'Здравоохранение', emoji:'🏥'},
+  {id:'madaniyat', uz:'Madaniyat va dam olish', ru:'Культура и отдых', emoji:'🎭'},
+  {id:'ovqat', uz:'Oziq-ovqat va restoranlar', ru:'Еда и рестораны', emoji:'🍽️'},
+  {id:'mehmon', uz:'Mehmonxonalar', ru:'Гостиницы', emoji:'🏨'},
+  {id:'transport', uz:"Transport va yo'l", ru:'Транспорт и дороги', emoji:'🚌'},
+  {id:'savdo', uz:'Savdo va xizmatlar', ru:'Торговля и услуги', emoji:'🛒'},
+  {id:'davlat', uz:'Davlat va moliyaviy', ru:'Гос. и финансы', emoji:'🏦'},
+  {id:'talim', uz:"Ta'lim", ru:'Образование', emoji:'🎓'},
+  {id:'sport', uz:'Sport va hordiq', ru:'Спорт и отдых', emoji:'⚽'},
+];
+const SECDATA = {
+  avto: SERVICES.map(s=>({id:s.id, uz:s.nameUz, ru:s.nameRu, photo:true})),
+  saglik:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🏥'},{id:'sag_shifoxona',uz:'Shifoxona',ru:'Больница',emoji:'🏥'},{id:'sag_poliklinika',uz:'Poliklinika',ru:'Поликлиника',emoji:'🩺'},{id:'sag_dorixona',uz:'Dorixona',ru:'Аптека',emoji:'💊'},{id:'sag_tez',uz:'Tez yordam (103)',ru:'Скорая (103)',emoji:'🚑'},{id:'sag_stoma',uz:'Stomatologiya',ru:'Стоматология',emoji:'🦷'},{id:'sag_lab',uz:'Laboratoriya',ru:'Лаборатория',emoji:'🔬'}],
+  madaniyat:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🎭'},{id:'mad_muzey',uz:'Muzey',ru:'Музей',emoji:'🏛️'},{id:'mad_teatr',uz:'Teatr',ru:'Театр',emoji:'🎭'},{id:'mad_kutub',uz:'Kutubxona',ru:'Библиотека',emoji:'📚'},{id:'mad_park',uz:'Park',ru:'Парк',emoji:'🌳'},{id:'mad_kino',uz:'Kinoteatr',ru:'Кинотеатр',emoji:'🎬'},{id:'mad_konsert',uz:'Konsert zali',ru:'Концертный зал',emoji:'🎵'}],
+  ovqat:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🍽️'},{id:'ovq_restoran',uz:'Restoran',ru:'Ресторан',emoji:'🍽️'},{id:'ovq_kafe',uz:'Kafe',ru:'Кафе',emoji:'☕'},{id:'ovq_fast',uz:'Fast-food',ru:'Фастфуд',emoji:'🍔'},{id:'ovq_choyxona',uz:'Choyxona',ru:'Чайхана',emoji:'🫖'},{id:'ovq_milliy',uz:'Milliy taomlar',ru:'Нац. кухня',emoji:'🍲'},{id:'ovq_yetkaz',uz:'Yetkazib berish',ru:'Доставка еды',emoji:'🛵'}],
+  mehmon:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🏨'},{id:'meh_hotel',uz:'Mehmonxona',ru:'Гостиница',emoji:'🏨'},{id:'meh_hostel',uz:'Hostel',ru:'Хостел',emoji:'🛏️'},{id:'meh_guest',uz:'Guest house',ru:'Гостевой дом',emoji:'🏡'},{id:'meh_sanat',uz:'Sanatoriy',ru:'Санаторий',emoji:'🏖️'}],
+  transport:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🚌'},{id:'tr_avtobekat',uz:'Avtobekat',ru:'Автовокзал',emoji:'🚌'},{id:'tr_temiryol',uz:"Temir yo'l vokzali",ru:'Ж/д вокзал',emoji:'🚉'},{id:'tr_aeroport',uz:'Aeroport',ru:'Аэропорт',emoji:'✈️'},{id:'tr_metro',uz:'Metro',ru:'Метро',emoji:'🚇'},{id:'tr_taksi',uz:'Taksi',ru:'Такси',emoji:'🚕'},{id:'tr_azs',uz:"Yoqilg'i shoxobchasi",ru:'АЗС',emoji:'⛽'}],
+  savdo:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🛒'},{id:'sav_dokon',uz:"Do'kon",ru:'Магазин',emoji:'🏪'},{id:'sav_bozor',uz:'Bozor',ru:'Рынок',emoji:'🧺'},{id:'sav_super',uz:'Supermarket',ru:'Супермаркет',emoji:'🛒'},{id:'sav_markaz',uz:'Savdo markazi',ru:'Торговый центр',emoji:'🏬'},{id:'sav_maishiy',uz:'Maishiy xizmat',ru:'Бытовые услуги',emoji:'🧰'}],
+  davlat:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🏦'},{id:'dav_bank',uz:'Bank',ru:'Банк',emoji:'🏦'},{id:'dav_bankomat',uz:'Bankomat',ru:'Банкомат',emoji:'🏧'},{id:'dav_pochta',uz:'Pochta',ru:'Почта',emoji:'✉️'},{id:'dav_mfy',uz:'Mahalla (MFY)',ru:'Махалля',emoji:'🏘️'},{id:'dav_notarius',uz:'Notarius',ru:'Нотариус',emoji:'📜'},{id:'dav_soliq',uz:'Soliq',ru:'Налоговая',emoji:'🧾'},{id:'dav_davxizmat',uz:'Davlat xizmatlari',ru:'Госуслуги',emoji:'🏛️'}],
+  talim:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'🎓'},{id:'tal_maktab',uz:'Maktab',ru:'Школа',emoji:'🏫'},{id:'tal_univ',uz:'Universitet',ru:'Университет',emoji:'🎓'},{id:'tal_kollej',uz:'Kollej',ru:'Колледж',emoji:'📘'},{id:'tal_markaz',uz:"O'quv markaz",ru:'Учебный центр',emoji:'📝'},{id:'tal_bogcha',uz:"Bog'cha",ru:'Детский сад',emoji:'🧸'}],
+  sport:[{id:'all',uz:'Barchasi',ru:'Все',emoji:'⚽'},{id:'spo_stadion',uz:'Stadion',ru:'Стадион',emoji:'🏟️'},{id:'spo_fitnes',uz:'Fitnes zali',ru:'Фитнес',emoji:'🏋️'},{id:'spo_basseyn',uz:'Basseyn',ru:'Бассейн',emoji:'🏊'},{id:'spo_majmua',uz:'Sport majmuasi',ru:'Спорткомплекс',emoji:'🤸'},{id:'spo_maydon',uz:'Sport maydoni',ru:'Спортплощадка',emoji:'🥅'}],
+};
+const SUBMAP = {};
+Object.values(SECDATA).forEach(arr=>arr.forEach(s=>{ SUBMAP[s.id]={uz:s.uz,ru:s.ru,emoji:s.emoji,photo:s.photo}; }));
 const SVCEMO = {
   hammasi:['🧰','#EEF2FF'], evakuator:['🛻','#FEF3C7'], vulkanizatsiya:['🛞','#E0F2FE'],
   elektrik:['⚡','#FEF9C3'], yoqilgi:['⛽','#FEE2E2'], moy:['🛢️','#F3E8FF'],
@@ -1129,10 +1172,10 @@ const DESC = {
 };
 
 /* ---------------- State ---------------- */
-const state = {lang:'uz', service:'hammasi', region:'all', sub:'all', sort:'masofa', gps:false, locSet:false};
+const state = {lang:'uz', sector:'avto', service:'hammasi', region:'all', sub:'all', sort:'masofa', gps:false, locSet:false};
 
 /* ---------------- Name helpers ---------------- */
-function svcName(id){ return state.lang==='ru' ? SVC[id].nameRu : SVC[id].nameUz; }
+function svcName(id){ const m=SUBMAP[id]; if(m) return state.lang==='ru'?m.ru:m.uz; if(SVC[id]) return state.lang==='ru'?SVC[id].nameRu:SVC[id].nameUz; return id; }
 function regionName(id){ return state.lang==='ru' ? (REGIONS[id].nameRu||REGIONS[id].name) : REGIONS[id].name; }
 function subDisp(region, sub){
   if(state.lang==='ru' && SUB_RU[sub]) return SUB_RU[sub];
@@ -1183,8 +1226,9 @@ function byLabel(){ return state.sort==='masofa'?t('byDist'):t('byRating'); }
 
 /* ---------------- Filtering ---------------- */
 function getFiltered(){
-  let rows = PROVIDERS.map(p => ({...p, dist: distKm(p)}));
-  if(state.service !== 'hammasi') rows = rows.filter(p => p.services.includes(state.service));
+  let rows = PROVIDERS.filter(p => (p.sector||'avto')===state.sector).map(p => ({...p, dist: distKm(p)}));
+  const allId = state.sector==='avto' ? 'hammasi' : 'all';
+  if(state.service !== allId) rows = rows.filter(p => (p.services||[]).includes(state.service));
   if(!state.gps && state.region !== 'all'){
     rows = rows.filter(p => p.region === state.region);
     if(state.sub !== 'all') rows = rows.filter(p => p.sub === state.sub);
@@ -1198,9 +1242,27 @@ function getFiltered(){
 /* ---------------- Render: services ---------------- */
 function renderServices(){
   const el = document.getElementById('services');
-  el.innerHTML = SERVICES.map(s =>
-    `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}"><span class="ic img"><img src="svc/${s.id}.jpg" alt="" loading="lazy"></span><span class="svc-lbl">${svcName(s.id)}</span></button>`).join('');
+  const subs = SECDATA[state.sector] || [];
+  el.innerHTML = subs.map(s => {
+    const icon = s.photo
+      ? `<span class="ic img"><img src="svc/${s.id}.jpg" alt="" loading="lazy"></span>`
+      : `<span class="ic emo2">${s.emoji||'📍'}</span>`;
+    return `<button class="svc ${s.id===state.service?'active':''}" data-svc="${s.id}">${icon}<span class="svc-lbl">${svcName(s.id)}</span></button>`;
+  }).join('');
   el.querySelectorAll('.svc').forEach(b => b.onclick = () => { state.service = b.dataset.svc; renderAll(); });
+  const lbl = document.querySelector('.controls .ctl-label');
+  if(lbl){ const sec=SECTORS.find(x=>x.id===state.sector); lbl.textContent = sec ? (state.lang==='ru'?sec.ru:sec.uz) : ''; }
+}
+function renderSectors(){
+  const el = document.getElementById('sectors'); if(!el) return;
+  el.innerHTML = SECTORS.map(s => `<button class="sector ${s.id===state.sector?'on':''}" data-sec="${s.id}"><span class="sec-emo">${s.emoji}</span>${state.lang==='ru'?s.ru:s.uz}</button>`).join('');
+  el.querySelectorAll('.sector').forEach(b => b.onclick = () => {
+    state.sector = b.dataset.sec;
+    const subs = SECDATA[state.sector] || [];
+    state.service = subs[0] ? subs[0].id : 'all';
+    renderAll();
+    document.getElementById('services').scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
 }
 
 /* ---------------- Render: list ---------------- */
@@ -1213,6 +1275,10 @@ function renderList(){
     : `<span class="count">${rows.length}</span> ${t('found')} · ${byLabel()}`;
 
   if(rows.length === 0){
+    if(state.sector!=='avto'){
+      list.innerHTML = `<div class="empty">${I.film||''}<h3>${state.lang==='ru'?'Скоро':'Tez orada'}</h3><p>${state.lang==='ru'?'Мы наполняем этот раздел — скоро здесь появятся ближайшие места.':"Bu bo'lim to'ldirilmoqda — tez orada shu yerda eng yaqin joylar chiqadi."}</p></div>`;
+      return;
+    }
     const emptyRegion = !state.gps && state.region!=='all' && !PROVIDERS.some(p=>p.region===state.region);
     list.innerHTML = `<div class="empty">
       <h3>${emptyRegion ? t('emptyRegionTitle') : t('emptyTitle')}</h3>
@@ -1554,7 +1620,7 @@ document.getElementById('aiSend').onclick = () => aiHandle(document.getElementBy
 document.getElementById('aiInput').addEventListener('keydown', e=>{ if(e.key==='Enter') aiHandle(document.getElementById('aiInput').value); });
 
 /* ---------------- Render all ---------------- */
-function renderAll(){ renderServices(); renderList(); }
+function renderAll(){ renderSectors(); renderServices(); renderList(); }
 
 /* ---------------- Init ---------------- */
 populateSelects();
@@ -1596,8 +1662,8 @@ function trackVisit(){
   }catch(e){}
 }
 
-Object.assign(T.uz,{svcTypeLabel:"Shoshilinch xizmatlar",vhTitle:"O'zbekistonning eng yaqin avto yordami",vhSub:"Eng yaqin ustaxona va xizmatlarni bir necha soniyada toping — 24/7",vhPh:"Muammoni yozing: g'ildirak teshildi, dvigatel...",vhBtn:"Qidirish",vhPopular:"Mashhur:",vhStat1:"Xizmat turlari",vhStat2:"Ustaxonalar",vhStat3:"Tuman va shahar",vhStat4:"Doimiy yordam"});
-Object.assign(T.ru,{svcTypeLabel:"Экстренные услуги",vhTitle:"Ближайшая автопомощь по всему Узбекистану",vhSub:"Найдите ближайшие автосервисы и услуги за секунды — 24/7",vhPh:"Опишите проблему: пробил колесо, двигатель...",vhBtn:"Поиск",vhPopular:"Популярное:",vhStat1:"Видов услуг",vhStat2:"Мастерских",vhStat3:"Районов и городов",vhStat4:"Помощь всегда"});
+Object.assign(T.uz,{sectorLabel:"Sohani tanlang",svcTypeLabel:"Shoshilinch xizmatlar",vhTitle:"O'zbekistonning eng yaqin avto yordami",vhSub:"Eng yaqin ustaxona va xizmatlarni bir necha soniyada toping — 24/7",vhPh:"Muammoni yozing: g'ildirak teshildi, dvigatel...",vhBtn:"Qidirish",vhPopular:"Mashhur:",vhStat1:"Xizmat turlari",vhStat2:"Ustaxonalar",vhStat3:"Tuman va shahar",vhStat4:"Doimiy yordam"});
+Object.assign(T.ru,{sectorLabel:"Выберите сферу",svcTypeLabel:"Экстренные услуги",vhTitle:"Ближайшая автопомощь по всему Узбекистану",vhSub:"Найдите ближайшие автосервисы и услуги за секунды — 24/7",vhPh:"Опишите проблему: пробил колесо, двигатель...",vhBtn:"Поиск",vhPopular:"Популярное:",vhStat1:"Видов услуг",vhStat2:"Мастерских",vhStat3:"Районов и городов",vhStat4:"Помощь всегда"});
 function vHeroSearch(){ const q=(document.getElementById('vsearchInput').value||'').trim(); if(!q){ document.getElementById('services').scrollIntoView({behavior:'smooth',block:'start'}); return; } aiOpen(); aiHandle(q); document.getElementById('vsearchInput').value=''; }
 function vHeroChip(id){ state.service=id; renderServices(); renderList(); document.getElementById('services').scrollIntoView({behavior:'smooth',block:'start'}); }
 try{ document.getElementById('vstatShops').textContent = PROVIDERS.length+'+'; }catch(e){}
